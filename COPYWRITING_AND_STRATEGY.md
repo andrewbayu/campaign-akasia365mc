@@ -50,7 +50,7 @@
 
 ## 📝 Alur Lanjutan Landing Page
 1. **Section 2: The Story (Fakta Lemak Tubuh):** Menggunakan bahasa percakapan sehari-hari yang relatable (*kenapa perut & lengan tetap nempel walau timbangan turun*, konsep kantong lemak yang hanya mengempes sementara vs tabungan darurat tubuh) & perbandingan kontras Sedot Lemak Biasa (Operasi) vs LAMS Korea.
-2. **Section 3: The Offer (The Stack):** 3D Full Body Scan + Konsultasi Dokter Spesialis 1-on-1 + Personalized Contour Roadmap + Bonus Jalur Prioritas VIP. Garansi 100% Bebas Paksaan Medis.
+2. **Section 3: The Offer (Tahap 1 LAMS Journey):** Sesi Konsultasi & Pre-Screening Awal Bebas Biaya bersama Beauty Consultant resmi (pengukuran lingkar tubuh presisi, cek riwayat kesehatan & kualifikasi kandidat, edukasi alur lengkap LAMS & Orange Care, panduan ekspektasi objektif DOs & DONTs, serta box transparansi alur medis Beauty Consultant → Dokter Spesialis Bedah Plastik). 100% bebas biaya konsultasi dan tanpa paksaan medis.
 3. **Section 4: Social Proof ("What They Say?"):**
    - Eyebrow: `What They Say?`
    - Headline: `Cerita Nyata Mereka yang Sudah Mencoba LAMS`
