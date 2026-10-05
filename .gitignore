@@ -1,3 +1,6 @@
 .DS_Store
 Thumbs.db
 *.tmp
+
+# Local Netlify folder
+.netlify

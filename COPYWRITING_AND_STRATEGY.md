@@ -18,7 +18,7 @@
     - *100% Ditangani Dokter Bedah Spesialis Bersertifikat Korea*
 - **Navbar Header:**
   - Logo resmi asli Akasia 365mc (`365mc-logo.svg`).
-  - Action button: `Jadwalkan Konsultasi Dokter` dengan Akasia Orange Gradient.
+  - Action button: `Jadwalkan Konsultasi Awal` dengan Akasia Orange Gradient; booking pertama adalah dengan Beauty Consultant.
 
 ---
 
@@ -44,13 +44,14 @@
 - **Direct-Response Fast Booking Form:**
   - Seleksi area lemak target (Perut Bawah, Lengan Atas, Paha Dalam/Luar, Pinggang/Flank).
   - Input Nama Lengkap & WhatsApp.
-  - Primary CTA: **`KONSULTASIKAN KONDISI TUBUHMU BERSAMA DOKTER →`** (100% bebas dari Rp0).
+  - Primary CTA: **`MINTA JADWAL KONSULTASI AWAL`** via WhatsApp Concierge.
+  - Konsultasi awal Beauty Consultant tidak dikenakan biaya konsultasi (biaya admin RS/klinik dapat berlaku sesuai lokasi). Konsultasi Dokter Spesialis Bedah Plastik adalah tahap terpisah dan berbayar.
 
 ---
 
 ## 📝 Alur Lanjutan Landing Page
 1. **Section 2: The Story (Fakta Lemak Tubuh):** Menggunakan bahasa percakapan sehari-hari yang relatable (*kenapa perut & lengan tetap nempel walau timbangan turun*, konsep kantong lemak yang hanya mengempes sementara vs tabungan darurat tubuh) & perbandingan kontras Sedot Lemak Biasa (Operasi) vs LAMS Korea.
-2. **Section 3: The Offer (Tahap 1 LAMS Journey):** Sesi Konsultasi & Pre-Screening Awal Bebas Biaya bersama Beauty Consultant resmi (pengukuran lingkar tubuh presisi, cek riwayat kesehatan & kualifikasi kandidat, edukasi alur lengkap LAMS & Orange Care, panduan ekspektasi objektif DOs & DONTs, serta box transparansi alur medis Beauty Consultant → Dokter Spesialis Bedah Plastik). 100% bebas biaya konsultasi dan tanpa paksaan medis.
+2. **Section 3: The Offer (LAMS Journey Mapping):** Untuk calon pasien dengan area fokus spesifik yang ingin memahami LAMS sebelum memutuskan. Reframe the free first session as clarity on four things: (1) area and baseline measurement in person, (2) initial screening and context review with a Beauty Consultant, (3) the path from preparation and doctor consultation through the procedure, 3 Orange Care sessions, and 3/6-month follow-up, and (4) realistic expectations and DOs/DONTs. The Beauty Consultant does not determine medical suitability; a separate paid consultation with the operating plastic surgeon is where the doctor assesses suitability, risks, timing, and treatment plan. The initial consultation has no consultation fee; hospital/clinic administration charges may apply by location. No obligation to proceed.
 3. **Section 4: Social Proof ("What They Say?"):**
    - Eyebrow: `What They Say?`
    - Headline: `Cerita Nyata Mereka yang Sudah Mencoba LAMS`

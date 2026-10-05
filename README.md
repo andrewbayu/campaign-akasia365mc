@@ -19,9 +19,9 @@ Landing page direct-response berkonversi tinggi untuk kampanye **Akasia 365mc In
 4. **Section 2: The Story (Fakta Lemak Tubuh):**
    - Penjelasan ilmiah dengan bahasa sehari-hari mengapa lemak di perut & lengan tetap membandel walau sudah diet dan olahraga ketat.
    - Perbandingan kontras: Sedot Lemak Biasa (Operasi) vs LAMS Korea.
-5. **Section 3: The Offer (Evaluasi Klinis Lengkap):**
-   - Value stack 3D Full Body Scan + Konsultasi 1-on-1 Dokter Spesialis + Personalized Contour Roadmap + Bonus Jalur Prioritas VIP Fast-Track.
-   - Garansi 100% Bebas Paksaan Medis.
+5. **Section 3: The Offer (LAMS Journey Mapping):**
+   - Konsultasi awal dengan Beauty Consultant untuk memetakan area fokus, screening awal, ekspektasi, persiapan, prosedur, Orange Care, dan kontrol pasca-tindakan.
+   - Biaya konsultasi awal Rp0; biaya admin RS/klinik dapat berlaku. Konsultasi dokter operator adalah tahap terpisah dan berbayar; dokter menentukan kelayakan medis.
 6. **Section 4: Social Proof ("What They Say?"):**
    - 8 Featured Instagram Reels Carousel dari akun resmi `@365mc.indonesia` (termasuk Jesselyn, Violenzia Jeanette, Cyan Gainara, Marisa, Serafina Karla, Vero).
    - 30 Kartu Google Reviews nyata dalam 3 baris marquee animasi berlawanan arah dengan fitur *hover-to-pause*.
