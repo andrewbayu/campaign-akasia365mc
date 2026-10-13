@@ -20,6 +20,7 @@ Landing page direct-response berkonversi tinggi untuk kampanye **Akasia 365mc In
    - Penjelasan ilmiah dengan bahasa sehari-hari mengapa lemak di perut & lengan tetap membandel walau sudah diet dan olahraga ketat.
    - Perbandingan kontras: Sedot Lemak Biasa (Operasi) vs LAMS Korea.
 5. **Section 3: The Offer (Promo & Konsultasi Awal):**
+   - Jibangi, maskot 365mc, mendampingi headline promo dengan ukuran responsif untuk desktop dan mobile.
    - Diskon 15% + Extra 2 Sesi Orange Care, slot terbatas; ketersediaan dan ketentuan dikonfirmasi tim via WhatsApp.
    - Empat benefit ringkas: area fokus, screening awal, proses & aftercare, ekspektasi & biaya.
    - CTA “Klaim Promo & Konsultasi” dan pesan WhatsApp menyertakan permintaan promo.
