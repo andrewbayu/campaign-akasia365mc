@@ -41,3 +41,12 @@ Landing page direct-response berkonversi tinggi untuk kampanye **Akasia 365mc In
 
 ## 🌐 Deploy
 Halaman ini bersifat *static single-page* dan dapat di-host langsung di GitHub Pages, Vercel, Netlify, atau Cloudflare Pages tanpa konfigurasi build.
+
+## Meta Pixel
+
+- Pixel ID: `1294224382246215`.
+- `PageView`: sekali saat halaman dimuat; fallback noscript disediakan.
+- `Lead`: setelah form valid disubmit untuk membuka WhatsApp, maksimal sekali per pemuatan halaman. Event ini menandai handoff, bukan konfirmasi pesan terkirim atau konsultasi terjadwal.
+- Automatic event detection dimatikan. Nama, nomor WhatsApp, dan area tubuh tidak disertakan sebagai parameter Pixel atau advanced matching.
+- Tracking gagal/diblokir tidak menghentikan handoff WhatsApp.
+- Jalankan pemeriksaan dengan `node --test tests/meta-pixel.test.cjs`.
