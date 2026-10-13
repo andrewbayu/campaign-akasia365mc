@@ -11,7 +11,7 @@ Landing page direct-response berkonversi tinggi untuk kampanye **Akasia 365mc In
    - Logo resmi vector Akasia 365mc (`365mc-logo.svg`).
    - Call-to-action button dengan efek Akasia Orange Gradient.
 3. **Hero Section:**
-   - Headline hook berbasis angka nyata: *"Turun 5 kg dalam 30 Hari, 2 Jam Tindakan Langsung Pulang"*.
+   - Headline: *"Lingkar Tubuh Susut Hingga 7 cm dalam 30 Hari,* Tanpa Perlu Rawat Inap"*, disertai catatan variasi hasil.
    - Subheadline empatik percakapan sehari-hari tanpa jargon medis rumit.
    - 2 Kartu Pencapaian Utama (*6+ Juta Prosedur* & *97% Kepuasan Pasien*).
    - Media Coverage Marquee: Side-scrolling logo media nasional & internasional (*Bloomberg, CNBC Indonesia, DetikHealth, Kontan, Metro TV, Warta Ekonomi, Fimela*).
@@ -19,15 +19,17 @@ Landing page direct-response berkonversi tinggi untuk kampanye **Akasia 365mc In
 4. **Section 2: The Story (Fakta Lemak Tubuh):**
    - Penjelasan ilmiah dengan bahasa sehari-hari mengapa lemak di perut & lengan tetap membandel walau sudah diet dan olahraga ketat.
    - Perbandingan kontras: Sedot Lemak Biasa (Operasi) vs LAMS Korea.
-5. **Section 3: The Offer (LAMS Journey Mapping):**
-   - Konsultasi awal dengan Beauty Consultant untuk memetakan area fokus, screening awal, ekspektasi, persiapan, prosedur, Orange Care, dan kontrol pasca-tindakan.
+5. **Section 3: The Offer (Promo & Konsultasi Awal):**
+   - Diskon 15% + Extra 2 Sesi Orange Care, slot terbatas; ketersediaan dan ketentuan dikonfirmasi tim via WhatsApp.
+   - Empat benefit ringkas: area fokus, screening awal, proses & aftercare, ekspektasi & biaya.
+   - CTA “Klaim Promo & Konsultasi” dan pesan WhatsApp menyertakan permintaan promo.
    - Biaya konsultasi awal Rp0; biaya admin RS/klinik dapat berlaku. Konsultasi dokter operator adalah tahap terpisah dan berbayar; dokter menentukan kelayakan medis.
 6. **Section 4: Social Proof ("What They Say?"):**
    - 8 Featured Instagram Reels Carousel dari akun resmi `@365mc.indonesia` (termasuk Jesselyn, Violenzia Jeanette, Cyan Gainara, Marisa, Serafina Karla, Vero).
    - 30 Kartu Google Reviews nyata dalam 3 baris marquee animasi berlawanan arah dengan fitur *hover-to-pause*.
    - Bottom qualification banner & direct CTA.
 7. **Section 5: FAQ & Sticky Mobile Bar:**
-   - 3 Objection buster utama.
+   - 4 FAQ utama.
    - Sticky mobile bar untuk kemudahan reservasi di perangkat mobile.
 
 ## 🛠️ Tech Stack & Standar Desain

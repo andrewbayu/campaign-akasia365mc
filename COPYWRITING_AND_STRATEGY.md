@@ -1,7 +1,7 @@
 # AKASIA 365mc INDONESIA — CONSULTATION LANDING PAGE
 ## Design & Copywriting Blueprint (Updated Hero & Credibility Architecture)
 
-**Live Local Preview:** `http://localhost:3000/consultation.html`  
+**Preview:** serve repository root and open `index.html`.
 **Brand:** Akasia 365mc Indonesia  
 **Target Audience:** Affluent working professionals, mothers, and executives seeking targeted subcutaneous fat reduction (belly, arms, flanks, thighs) with high medical credibility and minimal downtime.
 
@@ -18,7 +18,7 @@
     - *100% Ditangani Dokter Bedah Spesialis Bersertifikat Korea*
 - **Navbar Header:**
   - Logo resmi asli Akasia 365mc (`365mc-logo.svg`).
-  - Action button: `Jadwalkan Konsultasi Awal` dengan Akasia Orange Gradient; booking pertama adalah dengan Beauty Consultant.
+  - Action button: `Klaim Promo` dengan Akasia Orange Gradient; booking pertama adalah dengan Beauty Consultant.
 
 ---
 
@@ -26,9 +26,10 @@
 
 - **Eyebrow:** Dihapus total agar ruang visual langsung tertuju pada headline hook yang kuat.
 - **Headline Hook (Kasus Nyata & Angka Konkret):**  
-  # **Turun 5 kg dalam 30 Hari, 2 Jam Tindakan Langsung Pulang.**
+  # **Lingkar Tubuh Susut Hingga 7 cm dalam 30 Hari,* Tanpa Perlu Rawat Inap.**
+  - Catatan hasil individual tetap ditampilkan di bawah subheadline.
 - **Subheadline (Bahasa Sehari-hari, Empatik & Alami):**  
-  *Udah capek diet ketat dan rutin olahraga tapi perut buncit atau lengan bergelambir tetap gak mau hilang? Teknologi LAMS dari Korea mengeluarkan langsung lemak membandel di area targetmu — 100% bius lokal sadar, tanpa operasi, dan tanpa bekas jahitan.*
+  *Lemak di area tertentu tetap membandel? Kenali LAMS dari Korea untuk pembentukan kontur tubuh. Mulai dengan konsultasi awal bersama Beauty Consultant.*
 - **2 Featured Achievement Badges (Simetris & Terfokus):**
   1. 🏆 **6+ Juta Prosedur LAMS Sukses di Korea & Indonesia** (5.600+ tindakan di Indonesia).
   2. ⭐ **97% Kepuasan Pasien** (Direkomendasikan 9 dari 10 orang).
@@ -44,19 +45,26 @@
 - **Direct-Response Fast Booking Form:**
   - Seleksi area lemak target (Perut Bawah, Lengan Atas, Paha Dalam/Luar, Pinggang/Flank).
   - Input Nama Lengkap & WhatsApp.
-  - Primary CTA: **`MINTA JADWAL KONSULTASI AWAL`** via WhatsApp Concierge.
+  - Primary CTA: **`KLAIM PROMO & KONSULTASI`** via WhatsApp Concierge.
   - Konsultasi awal Beauty Consultant tidak dikenakan biaya konsultasi (biaya admin RS/klinik dapat berlaku sesuai lokasi). Konsultasi Dokter Spesialis Bedah Plastik adalah tahap terpisah dan berbayar.
 
 ---
 
 ## 📝 Alur Lanjutan Landing Page
-1. **Section 2: The Story (Fakta Lemak Tubuh):** Menggunakan bahasa percakapan sehari-hari yang relatable (*kenapa perut & lengan tetap nempel walau timbangan turun*, konsep kantong lemak yang hanya mengempes sementara vs tabungan darurat tubuh) & perbandingan kontras Sedot Lemak Biasa (Operasi) vs LAMS Korea.
-2. **Section 3: The Offer (LAMS Journey Mapping):** Untuk calon pasien dengan area fokus spesifik yang ingin memahami LAMS sebelum memutuskan. Reframe the free first session as clarity on four things: (1) area and baseline measurement in person, (2) initial screening and context review with a Beauty Consultant, (3) the path from preparation and doctor consultation through the procedure, 3 Orange Care sessions, and 3/6-month follow-up, and (4) realistic expectations and DOs/DONTs. The Beauty Consultant does not determine medical suitability; a separate paid consultation with the operating plastic surgeon is where the doctor assesses suitability, risks, timing, and treatment plan. The initial consultation has no consultation fee; hospital/clinic administration charges may apply by location. No obligation to proceed.
+1. **Section 2: Fakta Lemak & Bukti Nyata:** Headline “Lemak Membandel Meski Sudah Diet?” dan dua kalimat pengantar singkat menuju dokumentasi pasien. Kelayakan tindakan ditentukan melalui pemeriksaan dokter.
+2. **Section 3: The Offer (Promo & Konsultasi Awal):**
+   - Headline: **Klaim Diskon 15%**.
+   - Bonus: **+ Extra 2 Sesi Orange Care**. Bonus ini tambahan; copy tidak menjanjikan total sesi.
+   - Urgensi: **Slot terbatas** tanpa kuota, hitung mundur, atau tenggat tambahan.
+   - Benefit singkat: Area Fokus, Screening Awal, Proses & Aftercare, Ekspektasi & Biaya.
+   - Konsultasi awal Beauty Consultant Rp0. Biaya admin RS/klinik dapat berlaku. Konsultasi dokter terpisah dan berbayar; dokter menentukan kelayakan medis. Tanpa kewajiban tindakan.
+   - CTA: **KLAIM PROMO & KONSULTASI** → form → WhatsApp Concierge.
+   - Tim mengonfirmasi ketersediaan dan ketentuan promo. Pesan WhatsApp membawa permintaan promo, area fokus, nama, dan nomor pengguna.
 3. **Section 4: Social Proof ("What They Say?"):**
    - Eyebrow: `What They Say?`
-   - Headline: `Cerita Nyata Mereka yang Sudah Mencoba LAMS`
-   - Subheadline: `Dengar langsung pengalaman jujur dan cerita nyata tanpa rekayasa dari mereka yang sudah merasakan perubahannya.`
+   - Headline: `Cerita Mereka Setelah LAMS`
+   - Subheadline: `Simak pengalaman pasien Akasia 365mc.`
    - 8 Instagram Reels interaktif dari akun resmi `@365mc.indonesia` (termasuk Jesselyn: `DZ4ilyeS53N`), bersih tanpa tag/ribbon, hanya judul video, nama orang, dan CTA `Tonton di Instagram →`.
    - 30 Kartu Google Reviews dalam 3 baris marquee animasi otomatis dengan hover-to-pause.
-   - Callout Banner Kualifikasi Klinis: *"Ingin Mengetahui Apakah Area Lemak Tubuhmu Cocok untuk Tindakan LAMS?"*.
-4. **Section 5: FAQ & Sticky Mobile Bar:** Jawaban cepat atas 3 keraguan utama pasien dan navigasi cepat via WhatsApp Concierge.
+   - Callout: *"Ingin Tahu Lebih Lanjut tentang LAMS?"* dengan CTA “Klaim Promo & Konsultasi”.
+4. **Section 5: FAQ & Sticky Mobile Bar:** Empat FAQ dan ringkasan “Diskon 15% · Slot Terbatas” / “+ Extra 2 Sesi Orange Care” dengan CTA “Klaim Promo”.
