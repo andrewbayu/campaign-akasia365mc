@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Akasia 365mc Indonesia | Body Contouring Presisi LAMS Korea</title>
   <meta name="description" content="Hilangkan lemak membandel di perut, lengan, atau paha secara presisi dengan teknologi LAMS Korea. 100% bius lokal sadar, minimal invasif, tanpa perlu rawat inap.">
+
+  <!-- Meta Pixel: explicit events only; no form fields or advanced matching data. -->
+  <script>
+    !function(f,b,e,v,n,t,s) {
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+      s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);
+    }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('set', 'autoConfig', false, '1294224382246215');
+    fbq('init', '1294224382246215');
+    fbq('track', 'PageView');
+  </script>
   
   <!-- Fonts: Montserrat (Headlines/Subheadlines) & Inter (Paragraphs/Body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,6 +121,9 @@
   </style>
 </head>
 <body class="bg-[#FAF9F5] text-dark font-sans antialiased pb-24 md:pb-0 selection:bg-brand-100">
+  <noscript>
+    <img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=1294224382246215&amp;ev=PageView&amp;noscript=1" />
+  </noscript>
 
   <!-- ================= TOP RUNNING TEXT TICKER (TRUST & CREDIBILITY) ================= -->
   <div class="bg-stone-900 text-white py-2.5 overflow-hidden sticky top-0 z-50 border-b border-stone-800 shadow-sm">
@@ -2378,6 +2395,8 @@
   </div>
 
   <script>
+    let hasTrackedLead = false;
+
     function setArea(name, btn) {
       document.getElementById('form-area').value = name;
       document.querySelectorAll('.area-btn').forEach(b => {
@@ -2409,6 +2428,16 @@
 
       const msg = `Halo Concierge Akasia 365mc Indonesia, saya ingin klaim promo Diskon 15% + Extra 2 Sesi Orange Care dan meminta jadwal konsultasi awal LAMS bersama Beauty Consultant. Mohon konfirmasi ketersediaan slot dan ketentuan promonya.\n\nNama: ${name}\nWhatsApp: ${formattedPhone}\nArea yang ingin dibahas: ${area}`;
       window.open(`https://wa.me/6281119017365?text=${encodeURIComponent(msg)}`, '_blank');
+
+      // Count the valid form handoff once per page; tracking must not interrupt WhatsApp.
+      if (!hasTrackedLead && typeof window.fbq === 'function') {
+        try {
+          window.fbq('track', 'Lead');
+          hasTrackedLead = true;
+        } catch {
+          // WhatsApp remains available if the browser blocks the tracking call.
+        }
+      }
     }
 
     function scrollReels(direction) {
