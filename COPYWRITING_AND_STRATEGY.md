@@ -53,6 +53,7 @@
 ## 📝 Alur Lanjutan Landing Page
 1. **Section 2: Fakta Lemak & Bukti Nyata:** Headline “Lemak Membandel Meski Sudah Diet?” dan dua kalimat pengantar singkat menuju dokumentasi pasien. Kelayakan tindakan ditentukan melalui pemeriksaan dokter.
 2. **Section 3: The Offer (Promo & Konsultasi Awal):**
+   - Jibangi ditempatkan di samping headline promo sebagai pendamping visual; ukuran lebih kecil di mobile agar copy dan CTA tetap menjadi fokus. Menggunakan PNG transparan asli dari client, dengan alt text “Jibangi, maskot 365mc”.
    - Headline: **Klaim Diskon 15%**.
    - Bonus: **+ Extra 2 Sesi Orange Care**. Bonus ini tambahan; copy tidak menjanjikan total sesi.
    - Urgensi: **Slot terbatas** tanpa kuota, hitung mundur, atau tenggat tambahan.
