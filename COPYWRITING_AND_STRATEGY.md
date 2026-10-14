@@ -65,7 +65,7 @@
    - Eyebrow: `What They Say?`
    - Headline: `Cerita Mereka Setelah LAMS`
    - Subheadline: `Simak pengalaman pasien Akasia 365mc.`
-   - 8 Instagram Reels interaktif dari akun resmi `@365mc.indonesia` (termasuk Jesselyn: `DZ4ilyeS53N`), bersih tanpa tag/ribbon, hanya judul video, nama orang, dan CTA `Tonton di Instagram →`.
+   - 8 Instagram Reels interaktif dari akun resmi `@365mcindonesia` (termasuk Jesselyn: `DZ4ilyeS53N`), bersih tanpa tag/ribbon, hanya judul video, nama orang, dan CTA `Tonton di Instagram →`.
    - 30 Kartu Google Reviews dalam 3 baris marquee animasi otomatis dengan hover-to-pause.
    - Callout: *"Ingin Tahu Lebih Lanjut tentang LAMS?"* dengan CTA “Klaim Promo & Konsultasi”.
 4. **Section 5: FAQ & Sticky Mobile Bar:** Empat FAQ dan ringkasan “Diskon 15% · Slot Terbatas” / “+ Extra 2 Sesi Orange Care” dengan CTA “Klaim Promo”.
