@@ -26,7 +26,7 @@ Landing page direct-response berkonversi tinggi untuk kampanye **Akasia 365mc In
    - CTA “Klaim Promo & Konsultasi” dan pesan WhatsApp menyertakan permintaan promo.
    - Biaya konsultasi awal Rp0; biaya admin RS/klinik dapat berlaku. Konsultasi dokter operator adalah tahap terpisah dan berbayar; dokter menentukan kelayakan medis.
 6. **Section 4: Social Proof ("What They Say?"):**
-   - 8 Featured Instagram Reels Carousel dari akun resmi `@365mc.indonesia` (termasuk Jesselyn, Violenzia Jeanette, Cyan Gainara, Marisa, Serafina Karla, Vero).
+   - 8 Featured Instagram Reels Carousel dari akun resmi `@365mcindonesia` (termasuk Jesselyn, Violenzia Jeanette, Cyan Gainara, Marisa, Serafina Karla, Vero).
    - 30 Kartu Google Reviews nyata dalam 3 baris marquee animasi berlawanan arah dengan fitur *hover-to-pause*.
    - Bottom qualification banner & direct CTA.
 7. **Section 5: FAQ & Sticky Mobile Bar:**
