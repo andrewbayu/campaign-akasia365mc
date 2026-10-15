@@ -23,6 +23,8 @@ After login, show a paginated table with time in Asia/Jakarta, name, WhatsApp, s
 Exercise unauthorized access, incorrect/expired/tampered sessions, login throttling, logout, input validation, submission idempotency, tracking-failure resilience, UTM persistence and Jakarta date boundaries. Verify both hosting adapters, deployment isolation and public build contents. Use synthetic data for end-to-end checks and remove it afterward. Production activation requires the storage-project choice and administrator password setup.
 # Server connection and operations
 
+The user selected a Vercel-only release. Netlify retains its previous production deployment. The release merge uses `[skip netlify]`; a build guard also prevents any later Netlify deployment from publishing this feature before `AKASIA_PROXY_KEY` is configured.
+
 Each hosting project supplies `AKASIA_PROXY_KEY` to its server function. The Edge Function verifies its SHA-256 hash against `akasia_campaign_settings.proxy_key_hash` before accepting forwarded identity or any route. Vercel reads its overwritten `x-forwarded-for`; Netlify reads `context.ip`. The key is never sent to browsers or committed. A production build uses a fixed public asset allowlist and does not read environment variables.
 
 `npm test` builds the site and runs authentication, attribution, persistence, proxy and query regressions. `npm run dev` uses synthetic rows only, requires local generated access files, and binds to localhost. `scripts/check-live.mjs <origin>` verifies real integration using one identifiable QA submission; remove only its recorded UUID after verification. `.local/qa-ids.json` records those UUIDs.
