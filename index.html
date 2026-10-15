@@ -2375,7 +2375,7 @@
   <footer class="bg-stone-900 text-stone-400 text-xs py-10 px-4 text-center">
     <div class="max-w-4xl mx-auto space-y-3">
       <p class="font-heading font-extrabold text-white text-sm">AKASIA 365mc INDONESIA</p>
-      <p class="font-sans">Akasia 365mc Jakarta • WhatsApp: +62 811-1901-7365</p>
+      <p class="font-sans">Akasia 365mc Jakarta • WhatsApp: 08566365365</p>
       <p class="text-[11px] text-stone-500 max-w-xl mx-auto font-sans">
         Disclaimer: LAMS adalah prosedur medis yang memerlukan evaluasi dokter spesialis. Hasil dapat berbeda bergantung pada anatomi individu.
       </p>
@@ -2418,16 +2418,12 @@
     function handleLeadSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('lead-name').value.trim();
-      let phone = document.getElementById('lead-phone').value.trim();
-      const area = document.getElementById('form-area').value;
+      const phone = document.getElementById('lead-phone').value.trim();
 
       if (!name || !phone) return;
 
-      phone = phone.replace(/^(\+62|62|0)/, '');
-      const formattedPhone = '0' + phone;
-
-      const msg = `Halo Concierge Akasia 365mc Indonesia, saya ingin klaim promo Diskon 15% + Extra 2 Sesi Orange Care dan meminta jadwal konsultasi awal LAMS bersama Beauty Consultant. Mohon konfirmasi ketersediaan slot dan ketentuan promonya.\n\nNama: ${name}\nWhatsApp: ${formattedPhone}\nArea yang ingin dibahas: ${area}`;
-      window.open(`https://wa.me/6281119017365?text=${encodeURIComponent(msg)}`, '_blank');
+      const msg = 'Halo Akasia 365mc Indonesia [Ad], saya ingin klaim promo Diskon 15% + Extra 2 Sesi Orange Care dan meminta jadwal konsultasi awal LAMS bersama Beauty Consultant. Mohon konfirmasi ketersediaan slot dan ketentuan promonya.';
+      window.open(`https://wa.me/628566365365?text=${encodeURIComponent(msg)}`, '_blank');
 
       // Count the valid form handoff once per page; tracking must not interrupt WhatsApp.
       if (!hasTrackedLead && typeof window.fbq === 'function') {

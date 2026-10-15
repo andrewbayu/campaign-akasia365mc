@@ -50,9 +50,8 @@ test('a valid submission records one Lead without form data and opens the intend
   assert.deepEqual(p.events, [['track', 'Lead']]);
   assert.equal(p.opened.length, 1);
   const url = new URL(p.opened[0].url);
-  assert.equal(url.origin + url.pathname, 'https://wa.me/6281119017365');
-  assert.ok(url.searchParams.get('text').includes('QA Example'));
-  assert.ok(url.searchParams.get('text').includes('Lengan Atas'));
+  assert.equal(url.origin + url.pathname, 'https://wa.me/628566365365');
+  assert.equal(url.searchParams.get('text'), 'Halo Akasia 365mc Indonesia [Ad], saya ingin klaim promo Diskon 15% + Extra 2 Sesi Orange Care dan meminta jadwal konsultasi awal LAMS bersama Beauty Consultant. Mohon konfirmasi ketersediaan slot dan ketentuan promonya.');
 });
 
 test('repeated form submissions do not count the same visitor as multiple leads', () => {
