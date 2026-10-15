@@ -4,14 +4,17 @@ import { randomUUID } from 'node:crypto';
 const origin = process.argv[2];
 if (!origin) throw new Error('Provide the verified deployment origin');
 const direct = process.argv.includes('--edge');
+const protection = {};
+if (process.argv.includes('--protected')) { process.loadEnvFile('.env.local'); protection['x-vercel-trusted-oidc-idp-token'] = process.env.VERCEL_OIDC_TOKEN; }
 const endpoint = 'https://jpjsycnbamvxnwmziedh.supabase.co/functions/v1/akasia-campaign';
 const password = (await readFile('.local/results-access.txt', 'utf8')).match(/Password: (.+)/)[1];
+const proxyKey = direct ? (await readFile('.local/proxy-key.txt', 'utf8')).trim() : null;
 const id = randomUUID(), campaign = 'qa-' + id.slice(0, 8);
 let ids = []; try { ids = JSON.parse(await readFile('.local/qa-ids.json', 'utf8')); } catch {}
 ids.push(id); await writeFile('.local/qa-ids.json', JSON.stringify(ids));
 async function request(route, body, cookie) {
   const parsed = new URL(route, origin);
-  const response = await fetch(direct ? endpoint + parsed.search : parsed, { method: body ? 'POST' : 'GET', headers: { ...(direct ? { 'x-campaign-route': parsed.pathname, 'x-campaign-host': new URL(origin).host, 'x-campaign-ip': 'qa-verification' } : {}), ...(body ? { Origin: origin, 'Content-Type': 'application/json' } : {}), ...(cookie ? { Cookie: cookie } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}), signal: AbortSignal.timeout(30000) });
+  const response = await fetch(direct ? endpoint + parsed.search : parsed, { method: body ? 'POST' : 'GET', headers: { ...protection, ...(direct ? { 'x-campaign-proxy-key': proxyKey, 'x-campaign-route': parsed.pathname, 'x-campaign-host': new URL(origin).host, 'x-campaign-ip': 'qa-verification' } : {}), ...(body ? { Origin: origin, 'Content-Type': 'application/json' } : {}), ...(cookie ? { Cookie: cookie } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}), signal: AbortSignal.timeout(30000) });
   return response;
 }
 const locked = await request('/result'); assert.equal(locked.status, 200); assert.match(await locked.text(), /login-form/);

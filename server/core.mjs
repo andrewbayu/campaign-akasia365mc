@@ -23,6 +23,9 @@ export async function verifyPassword(password, record, crypto = globalThis.crypt
   try { return equal(await derivePassword(password, unb64(record.password_salt), crypto), unb64(record.password_hash)); }
   catch { return false; }
 }
+export async function hashProxyKey(key, crypto = globalThis.crypto) {
+  return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', encoder.encode(key))), byte => byte.toString(16).padStart(2, '0')).join('');
+}
 async function sign(value, secret, crypto) {
   const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   return new Uint8Array(await crypto.subtle.sign('HMAC', key, encoder.encode(value)));
@@ -107,19 +110,23 @@ async function readJson(request) {
   if (encoder.encode(text).length > 12288) throw new HttpError(413, 'Permintaan terlalu besar.');
   try { return JSON.parse(text); } catch { invalid('Format permintaan tidak valid.'); }
 }
-export function createHandler({ store, now = Date.now, crypto = globalThis.crypto, allowLocal = false }) {
+export function createHandler({ store, now = Date.now, crypto = globalThis.crypto, allowLocal = false, requireProxy = true }) {
   return async request => {
     const url = new URL(request.url), route = (request.headers.get('x-campaign-route') || url.pathname).replace(/\/$/, '');
     try {
       if (!['/api/leads', '/result', '/api/results/login', '/api/results/logout', '/api/results/data', '/api/results/facets'].includes(route)) throw new HttpError(404, 'Halaman tidak ditemukan.');
+      const config = await store.getConfig();
+      if (!config?.password_hash || !config?.session_secret) throw new Error('Configuration unavailable');
+      if (requireProxy) {
+        const key = request.headers.get('x-campaign-proxy-key');
+        if (!key || key.length > 256 || !config.proxy_key_hash || !equal(encoder.encode(await hashProxyKey(key, crypto)), encoder.encode(config.proxy_key_hash))) throw new HttpError(403, 'Permintaan tidak diizinkan.');
+      }
       const host = request.headers.get('x-campaign-host') || url.host;
       const origin = (allowLocal && /^(localhost|127\.0\.0\.1):/.test(host) ? 'http://' : 'https://') + host;
       if (!isAllowedOrigin(origin, allowLocal)) throw new HttpError(403, 'Permintaan tidak diizinkan.');
       const post = ['/api/leads', '/api/results/login', '/api/results/logout'].includes(route);
       if (request.method !== (post ? 'POST' : 'GET')) return json({ error: 'Metode tidak didukung.' }, 405, { Allow: post ? 'POST' : 'GET' });
       if (post && request.headers.get('origin') !== origin) throw new HttpError(403, 'Permintaan tidak diizinkan.');
-      const config = await store.getConfig();
-      if (!config?.password_hash || !config?.session_secret) throw new Error('Configuration unavailable');
       const ipKey = b64(await sign(request.headers.get('x-campaign-ip') || 'unknown', config.session_secret, crypto));
       const cookie = (request.headers.get('cookie') || '').split(';').map(s => s.trim()).find(s => s.startsWith(COOKIE + '='))?.slice(COOKIE.length + 1);
       const authenticated = await verifySession(cookie, config.session_secret, host, now(), crypto);

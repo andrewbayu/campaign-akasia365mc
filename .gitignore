@@ -12,3 +12,4 @@ Thumbs.db
 .vercel/
 dist/
 node_modules/
+.vercel

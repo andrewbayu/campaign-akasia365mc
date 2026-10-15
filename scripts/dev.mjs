@@ -14,7 +14,7 @@ const store = {
     return { rows: found.slice(f.offset, f.offset + f.limit), total: found.length, page: f.page, limit: f.limit };
   },
 };
-const handler = createHandler({ store, allowLocal: true });
+const handler = createHandler({ store, allowLocal: true, requireProxy: false });
 const root = resolve('dist');
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.mp4': 'video/mp4' };
 createServer(async (req, res) => {

@@ -1,6 +1,7 @@
 import { SECURITY_HEADERS } from './core.mjs';
 const BACKEND_URL = 'https://jpjsycnbamvxnwmziedh.supabase.co/functions/v1/akasia-campaign';
-export async function proxyRequest(request) {
+export async function proxyRequest(request, { key, ip } = {}) {
+  if (!key || !ip) return Response.json({ error: 'Layanan belum tersedia. Silakan coba lagi.' }, { status: 503, headers: SECURITY_HEADERS });
   const url = new URL(request.url);
   const route = url.searchParams.get('__route') || url.pathname;
   if (!/^\/(result\/?|api\/leads|api\/results\/(login|logout|data|facets))$/.test(route)) return new Response('Not found', { status: 404 });
@@ -9,7 +10,8 @@ export async function proxyRequest(request) {
   for (const name of ['cookie', 'origin', 'content-type']) if (request.headers.has(name)) headers.set(name, request.headers.get(name));
   headers.set('x-campaign-route', route);
   headers.set('x-campaign-host', url.host);
-  headers.set('x-campaign-ip', (request.headers.get('x-nf-client-connection-ip') || request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for') || 'unknown').split(',')[0].trim());
+  headers.set('x-campaign-ip', ip);
+  headers.set('x-campaign-proxy-key', key);
   try {
     const response = await fetch(BACKEND_URL + '?' + url.searchParams, { method: request.method, headers, ...(request.method !== 'GET' && request.method !== 'HEAD' ? { body: await request.arrayBuffer() } : {}), redirect: 'manual', signal: AbortSignal.timeout(20000) });
     const outgoing = new Headers(response.headers);

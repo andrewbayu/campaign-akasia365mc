@@ -22,6 +22,7 @@ create table if not exists public.akasia_campaign_settings (
   password_salt text not null,
   password_hash text not null,
   session_secret text not null,
+  proxy_key_hash text not null,
   updated_at timestamptz not null default now()
 );
 create table if not exists public.akasia_campaign_limits (

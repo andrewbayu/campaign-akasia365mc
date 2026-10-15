@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { webcrypto } from 'node:crypto';
-import { hashPassword, verifyPassword, createSession, verifySession, normalizeLead, parseFilters, createHandler } from '../server/core.mjs';
+import { hashPassword, verifyPassword, createSession, verifySession, normalizeLead, parseFilters, createHandler, hashProxyKey } from '../server/core.mjs';
 
 const now = Date.parse('2026-10-15T03:00:00Z');
 const origin = 'https://campaign-akasia365mc.vercel.app';
@@ -47,6 +47,7 @@ test('date filters cover entire selected days in Jakarta and reject reversed dat
 
 async function fixture() {
   const config = { ...await hashPassword('a-long-test-password', webcrypto), session_secret: secret };
+  config.proxy_key_hash = await hashProxyKey('test-proxy-key', webcrypto);
   const rows = new Map(); const buckets = new Map();
   const store = {
     getConfig: async () => config,
@@ -57,7 +58,7 @@ async function fixture() {
   };
   const handler = createHandler({ store, now: () => now, crypto: webcrypto });
   const req = (route, body, cookie, suppliedOrigin = origin) => new Request(origin + route, { method: body ? 'POST' : 'GET', headers: { 'x-campaign-route': route, 'x-campaign-host': new URL(origin).host, 'x-campaign-ip': 'test-client', ...(body ? { 'content-type': 'application/json', origin: suppliedOrigin } : {}), ...(cookie ? { cookie } : {}) }, ...(body ? { body: JSON.stringify(body) } : {}) });
-  return { handler, req, rows };
+  return { handler, req: (...args) => { const request = req(...args); request.headers.set('x-campaign-proxy-key', 'test-proxy-key'); return request; }, rows };
 }
 
 test('results and facets require a valid session; login returns only secure server cookies', async () => {
@@ -102,4 +103,15 @@ test('login throttling caps repeated password guesses', async () => {
   let response;
   for (let i = 0; i < 6; i++) response = await p.handler(p.req('/api/results/login', { password: 'wrong' }));
   assert.equal(response.status, 429);
+});
+test('direct backend callers cannot bypass the proxy by forging forwarded identity', async () => {
+  const p = await fixture();
+  for (const key of [null, 'wrong-proxy-key']) {
+    const request = p.req('/api/leads', validLead);
+    request.headers.delete('x-campaign-proxy-key');
+    if (key) request.headers.set('x-campaign-proxy-key', key);
+    request.headers.set('x-campaign-ip', webcrypto.randomUUID());
+    assert.equal((await p.handler(request)).status, 403);
+  }
+  assert.equal(p.rows.size, 0);
 });

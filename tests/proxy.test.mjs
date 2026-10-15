@@ -3,16 +3,31 @@ import assert from 'node:assert/strict';
 import { proxyRequest } from '../server/proxy.mjs';
 import { createStore } from '../server/store.mjs';
 import { parseFilters } from '../server/core.mjs';
+import vercelHandler from '../api/campaign.mjs';
+import netlifyHandler from '../netlify/functions/campaign.mjs';
 test('the same-origin proxy restores HTML, preserves the session cookie and strips routing parameters', async () => {
   const previous = globalThis.fetch; let sent;
   globalThis.fetch = async (url, options) => { sent = { url, options }; return new Response('<html>Login</html>', { headers: { 'content-type': 'text/plain', 'set-cookie': '__Host-akasia_results=example; Secure; HttpOnly; Path=/', 'cache-control': 'private, no-store', 'content-length': '18' } }); };
   try {
-    const response = await proxyRequest(new Request('https://akasia.netlify.app/result?__route=/result&from=2026-10-15', { headers: { cookie: 'existing=1', origin: 'https://akasia.netlify.app' } }));
+    const response = await proxyRequest(new Request('https://akasia.netlify.app/result?__route=/result&from=2026-10-15', { headers: { cookie: 'existing=1', origin: 'https://akasia.netlify.app' } }), { key: 'test-key', ip: '203.0.113.1' });
     assert.match(response.headers.get('content-type'), /text\/html/); assert.match(response.headers.get('set-cookie'), /HttpOnly/); assert.equal(response.headers.has('content-length'), false);
     assert.match(response.headers.get('content-security-policy'), /script-src 'self'/);
     assert.equal(new URL(sent.url).searchParams.has('__route'), false); assert.equal(sent.options.headers.get('x-campaign-host'), 'akasia.netlify.app'); assert.equal(sent.options.headers.get('cookie'), 'existing=1');
-    assert.equal((await proxyRequest(new Request('https://akasia.netlify.app/api/campaign?__route=/unrelated'))).status, 404);
+    assert.equal((await proxyRequest(new Request('https://akasia.netlify.app/api/campaign?__route=/unrelated'), { key: 'test-key', ip: '203.0.113.1' })).status, 404);
   } finally { globalThis.fetch = previous; }
+});
+test('each host uses its own trusted client identity and ignores spoofed provider headers', async () => {
+  const previous = globalThis.fetch, previousKey = process.env.AKASIA_PROXY_KEY; const sent = [];
+  process.env.AKASIA_PROXY_KEY = 'test-secret';
+  globalThis.fetch = async (_, options) => { sent.push(options.headers); return Response.json({ ok: true }); };
+  try {
+    const headers = { 'x-forwarded-for': '203.0.113.10', 'x-nf-client-connection-ip': 'attacker', 'x-real-ip': 'attacker', 'x-campaign-proxy-key': 'attacker' };
+    await vercelHandler.fetch(new Request('https://campaign-akasia365mc.vercel.app/result', { headers }));
+    await netlifyHandler(new Request('https://akasia.netlify.app/result', { headers }), { ip: '203.0.113.20' });
+    assert.equal(sent[0].get('x-campaign-ip'), '203.0.113.10'); assert.equal(sent[1].get('x-campaign-ip'), '203.0.113.20');
+    for (const headers of sent) assert.equal(headers.get('x-campaign-proxy-key'), 'test-secret');
+    assert.equal((await proxyRequest(new Request('https://akasia.netlify.app/result'))).status, 503);
+  } finally { globalThis.fetch = previous; if (previousKey === undefined) delete process.env.AKASIA_PROXY_KEY; else process.env.AKASIA_PROXY_KEY = previousKey; }
 });
 test('the database query applies date bounds, exact UTM filters, search and pagination together', async () => {
   let requested;

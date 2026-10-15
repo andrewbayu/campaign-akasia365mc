@@ -7,7 +7,7 @@ export function createStore({ url, key, fetcher = fetch }) {
   }
   return {
     async getConfig() {
-      return (await (await call('akasia_campaign_settings?id=eq.main&select=password_salt,password_hash,session_secret')).json())[0];
+      return (await (await call('akasia_campaign_settings?id=eq.main&select=password_salt,password_hash,session_secret,proxy_key_hash')).json())[0];
     },
     async consumeLimit(bucket, limit, seconds) {
       return await (await call('rpc/akasia_campaign_rate_limit', { method: 'POST', body: JSON.stringify({ p_bucket: bucket, p_limit: limit, p_seconds: seconds }) })).json();
