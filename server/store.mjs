@@ -1,3 +1,4 @@
+const searchValue = query => /^[+\d\s-]+$/.test(query) ? query.replace(/[\s-]/g, '').replace(/^0/, '62').replace(/^\+/, '') : query;
 export function createStore({ url, key, fetcher = fetch }) {
   const base = url.replace(/\/$/, '') + '/rest/v1/';
   async function call(path, options = {}) {
@@ -26,7 +27,7 @@ export function createStore({ url, key, fetcher = fetch }) {
       if (filters.source) query.set('utm_source', filters.source === '__none__' ? 'is.null' : 'eq.' + filters.source);
       if (filters.campaign) query.set('utm_campaign', filters.campaign === '__none__' ? 'is.null' : 'eq.' + filters.campaign);
       if (filters.q) {
-        const search = /^[+\d\s-]+$/.test(filters.q) ? filters.q.replace(/[\s-]/g, '').replace(/^0/, '62').replace(/^\+/, '') : filters.q;
+        const search = searchValue(filters.q);
         const pattern = '"*' + search + '*"';
         query.set('or', `(name.ilike.${pattern},phone.ilike.${pattern},email.ilike.${pattern},contact.ilike.${pattern})`);
       }
@@ -35,6 +36,10 @@ export function createStore({ url, key, fetcher = fetch }) {
     },
     async getFacets(environment) {
       return await (await call('rpc/akasia_campaign_facets', { method: 'POST', body: JSON.stringify({ p_environment: environment }) })).json();
+    },
+    async getAnalytics(f) {
+      const body = { p_environment:f.environment, p_after:f.after, p_before:f.before, p_area:f.area, p_form:f.form, p_consultation:f.consultation, p_source:f.source, p_campaign:f.campaign, p_search:f.q ? searchValue(f.q) : null };
+      return await (await call('rpc/akasia_campaign_analytics', { method:'POST', body:JSON.stringify(body) })).json();
     },
   };
 }
