@@ -2,8 +2,15 @@ create table if not exists public.akasia_campaign_leads (
   id uuid primary key,
   created_at timestamptz not null default now(),
   name text not null check (char_length(name) between 1 and 120),
-  phone text not null check (phone ~ '^628[0-9]{7,12}$' and char_length(phone) <= 15),
-  area text not null check (area in ('Perut Bawah', 'Lengan Atas', 'Paha (Dalam/Luar)', 'Pinggang / Flank')),
+  phone text check (phone is null or phone ~ '^[1-9][0-9]{8,14}$'),
+  contact varchar(160), channel text not null default 'whatsapp' check (channel in ('whatsapp','email')),
+  email varchar(160), city varchar(80),
+  source_form text not null default 'campaign' check (source_form in ('campaign','body-concern-check','body-journey-match','body-goal-navigator')),
+  external_id uuid,
+  area text not null check (char_length(area) between 1 and 256),
+  areas text[] generated always as (string_to_array(area, ' · ')) stored,
+  consultation_consent boolean default true, marketing_consent boolean not null default false,
+  details jsonb not null default '{}'::jsonb check (jsonb_typeof(details) = 'object'),
   consent boolean not null check (consent = true),
   privacy_version text not null,
   environment text not null check (environment in ('production','preview')),
@@ -16,6 +23,9 @@ create index if not exists akasia_campaign_leads_time on public.akasia_campaign_
 create index if not exists akasia_campaign_leads_area on public.akasia_campaign_leads (environment, area);
 create index if not exists akasia_campaign_leads_source on public.akasia_campaign_leads (environment, utm_source);
 create index if not exists akasia_campaign_leads_campaign on public.akasia_campaign_leads (environment, utm_campaign);
+create unique index if not exists akasia_campaign_leads_external on public.akasia_campaign_leads (source_form, external_id) where external_id is not null;
+create index if not exists akasia_campaign_leads_form_time on public.akasia_campaign_leads (environment, source_form, created_at desc, id desc);
+create index if not exists akasia_campaign_leads_areas on public.akasia_campaign_leads using gin (areas);
 
 create table if not exists public.akasia_campaign_settings (
   id text primary key check (id = 'main'),
@@ -23,6 +33,7 @@ create table if not exists public.akasia_campaign_settings (
   password_hash text not null,
   session_secret text not null,
   proxy_key_hash text not null,
+  lead_magnet_key_hash text,
   updated_at timestamptz not null default now()
 );
 create table if not exists public.akasia_campaign_limits (
@@ -56,6 +67,8 @@ $$;
 create or replace function public.akasia_campaign_facets(p_environment text)
 returns jsonb language sql stable security invoker set search_path = '' as $$
   select jsonb_build_object(
+    'forms', (select coalesce(jsonb_agg(f.source_form order by f.source_form), '[]'::jsonb) from (select distinct source_form from public.akasia_campaign_leads where environment = p_environment) f),
+    'areas', (select coalesce(jsonb_agg(a.area order by a.area), '[]'::jsonb) from (select distinct unnest(areas) as area from public.akasia_campaign_leads where environment = p_environment) a),
     'total', (select count(*) from public.akasia_campaign_leads where environment = p_environment),
     'sources', (select coalesce(jsonb_agg(s.utm_source order by s.utm_source), '[]'::jsonb) from (select distinct utm_source from public.akasia_campaign_leads where environment = p_environment limit 500) s),
     'campaigns', (select coalesce(jsonb_agg(c.utm_campaign order by c.utm_campaign), '[]'::jsonb) from (select distinct utm_campaign from public.akasia_campaign_leads where environment = p_environment limit 500) c)

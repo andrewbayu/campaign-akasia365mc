@@ -35,6 +35,6 @@ test('the database query applies date bounds, exact UTM filters, search and pagi
   const data = await store.listLeads(parseFilters(new URLSearchParams('from=2026-10-15&to=2026-10-15&area=Lengan+Atas&source=meta&campaign=promo15&page=2&q=0812')));
   assert.equal(data.total, 64); assert.equal(data.page, 2);
   assert.deepEqual(requested.url.searchParams.getAll('created_at'), ['gte.2026-10-14T17:00:00.000Z', 'lt.2026-10-15T17:00:00.000Z']);
-  assert.equal(requested.url.searchParams.get('offset'), '25'); assert.equal(requested.url.searchParams.get('utm_source'), 'eq.meta'); assert.equal(requested.url.searchParams.get('area'), 'eq.Lengan Atas'); assert.match(requested.url.searchParams.get('or'), /62812/);
+  assert.equal(requested.url.searchParams.get('offset'), '25'); assert.equal(requested.url.searchParams.get('utm_source'), 'eq.meta'); assert.equal(requested.url.searchParams.get('areas'), 'cs.{"Lengan Atas"}'); assert.match(requested.url.searchParams.get('or'), /62812/);
   assert.equal(requested.options.headers.Authorization, undefined);
 });
