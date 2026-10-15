@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/result", "destination": "/api/campaign?__route=/result" },
+    { "source": "/result/", "destination": "/api/campaign?__route=/result" },
+    { "source": "/api/leads", "destination": "/api/campaign?__route=/api/leads" },
+    { "source": "/api/results/:path*", "destination": "/api/campaign?__route=/api/results/:path*" }
+  ]
+}
