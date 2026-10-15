@@ -24,6 +24,7 @@ Landing page direct-response berkonversi tinggi untuk kampanye **Akasia 365mc In
    - Diskon 15% + Extra 2 Sesi Orange Care, slot terbatas; ketersediaan dan ketentuan dikonfirmasi tim via WhatsApp.
    - Empat benefit ringkas: area fokus, screening awal, proses & aftercare, ekspektasi & biaya.
    - CTA “Klaim Promo & Konsultasi” dan pesan WhatsApp menyertakan permintaan promo.
+   - Tujuan WhatsApp: **08566365365** (`wa.me/628566365365`). Pesan diawali “Halo Akasia 365mc Indonesia [Ad]” dan memakai template client tanpa tambahan data form.
    - Biaya konsultasi awal Rp0; biaya admin RS/klinik dapat berlaku. Konsultasi dokter operator adalah tahap terpisah dan berbayar; dokter menentukan kelayakan medis.
 6. **Section 4: Social Proof ("What They Say?"):**
    - 8 Featured Instagram Reels Carousel dari akun resmi `@365mcindonesia` (termasuk Jesselyn, Violenzia Jeanette, Cyan Gainara, Marisa, Serafina Karla, Vero).

@@ -60,7 +60,7 @@
    - Benefit singkat: Area Fokus, Screening Awal, Proses & Aftercare, Ekspektasi & Biaya.
    - Konsultasi awal Beauty Consultant Rp0. Biaya admin RS/klinik dapat berlaku. Konsultasi dokter terpisah dan berbayar; dokter menentukan kelayakan medis. Tanpa kewajiban tindakan.
    - CTA: **KLAIM PROMO & KONSULTASI** → form → WhatsApp Concierge.
-   - Tim mengonfirmasi ketersediaan dan ketentuan promo. Pesan WhatsApp membawa permintaan promo, area fokus, nama, dan nomor pengguna.
+   - Tim mengonfirmasi ketersediaan dan ketentuan promo. CTA mengarah ke WhatsApp **08566365365** (`628566365365`) dengan template kampanye yang ditetapkan client, diawali “Halo Akasia 365mc Indonesia [Ad]”. Pesan menggunakan teks persis yang disetujui tanpa tambahan data form.
 3. **Section 4: Social Proof ("What They Say?"):**
    - Eyebrow: `What They Say?`
    - Headline: `Cerita Mereka Setelah LAMS`
