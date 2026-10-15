@@ -2,6 +2,7 @@ import { loginPage, resultsPage } from './views.mjs';
 
 export const AREAS = ['Perut Bawah', 'Lengan Atas', 'Paha (Dalam/Luar)', 'Pinggang / Flank'];
 export const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id'];
+export const PRODUCTION_ORIGINS = ['https://campaign.365mcindonesia.com', 'https://campaign-akasia365mc.vercel.app', 'https://akasia.netlify.app'];
 const COOKIE = '__Host-akasia_results', SESSION_SECONDS = 28800;
 const encoder = new TextEncoder();
 const b64 = bytes => btoa(String.fromCharCode(...bytes)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
@@ -44,7 +45,7 @@ export async function verifySession(token, secret, host, now = Date.now(), crypt
   } catch { return false; }
 }
 export function isAllowedOrigin(origin, allowLocal = false) {
-  return ['https://campaign-akasia365mc.vercel.app', 'https://akasia.netlify.app'].includes(origin)
+  return PRODUCTION_ORIGINS.includes(origin)
     || /^https:\/\/campaign-akasia365mc-[a-z0-9-]+-hiandrewbayu-2950s-projects\.vercel\.app$/.test(origin)
     || /^https:\/\/deploy-preview-\d+--akasia\.netlify\.app$/.test(origin)
     || (allowLocal && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin));
@@ -66,7 +67,7 @@ export function normalizeLead(body, origin) {
   if (!/^628\d{7,12}$/.test(phone) || phone.length > 15) invalid('Periksa nomor WhatsApp kamu.');
   if (!AREAS.includes(body.area)) invalid('Pilih area yang tersedia.');
   if (body.consent !== true) invalid('Persetujuan penggunaan data diperlukan.');
-  const lead = { id: body.id, name, phone, area: body.area, consent: true, privacy_version: '2026-10-15', source_host: new URL(origin).host, environment: ['https://campaign-akasia365mc.vercel.app', 'https://akasia.netlify.app'].includes(origin) ? 'production' : 'preview' };
+  const lead = { id: body.id, name, phone, area: body.area, consent: true, privacy_version: '2026-10-15', source_host: new URL(origin).host, environment: PRODUCTION_ORIGINS.includes(origin) ? 'production' : 'preview' };
   for (const key of UTM_KEYS) lead[key] = field(body.utm?.[key], 256);
   let page;
   try { page = new URL(body.page_url || origin); } catch { invalid('Alamat halaman tidak valid.'); }

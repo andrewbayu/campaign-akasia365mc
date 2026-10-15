@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
+import { PRODUCTION_ORIGINS } from '../server/core.mjs';
 const origin = process.argv[2];
 if (!origin) throw new Error('Provide the verified deployment origin');
 const direct = process.argv.includes('--edge');
@@ -23,7 +24,7 @@ const login = await request('/api/results/login', { password }); assert.equal(lo
 const cookie = login.headers.get('set-cookie')?.split(';')[0]; assert.ok(cookie);
 const payload = { id, name: 'QA Verification', phone: '081200000000', area: 'Lengan Atas', consent: true, utm: { utm_source: 'qa', utm_medium: 'verification', utm_campaign: campaign, utm_content: 'integration-test', utm_term: 'QA', utm_id: 'QA' }, page_url: origin + '/?utm_source=qa&utm_campaign=' + campaign };
 for (let i = 0; i < 2; i++) { const saved = await request('/api/leads', payload); assert.equal(saved.status, 200, await saved.clone().text()); assert.deepEqual(await saved.json(), { ok: true }); }
-const environment = ['https://akasia.netlify.app', 'https://campaign-akasia365mc.vercel.app'].includes(origin) ? 'production' : 'preview';
+const environment = PRODUCTION_ORIGINS.includes(origin) ? 'production' : 'preview';
 const query = '/api/results/data?environment=' + environment + '&source=qa&campaign=' + campaign + '&q=Verification&area=Lengan%20Atas';
 const data = await request(query, null, cookie); assert.equal(data.status, 200); const result = await data.json(); assert.equal(result.total, 1); assert.equal(result.rows[0].utm_content, 'integration-test'); assert.equal(result.rows[0].phone, '6281200000000');
 const date = new Date(new Date(result.rows[0].created_at).getTime() + 7 * 3600000).toISOString().slice(0, 10);
