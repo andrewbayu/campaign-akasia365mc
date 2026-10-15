@@ -1,4 +1,5 @@
 import { loginPage, resultsPage } from './views.mjs';
+import { normalizeLeadMagnet, LeadValidationError, FORM_LABELS } from './lead-magnet.mjs';
 
 export const AREAS = ['Perut Bawah', 'Lengan Atas', 'Paha (Dalam/Luar)', 'Pinggang / Flank'];
 export const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id'];
@@ -67,7 +68,7 @@ export function normalizeLead(body, origin) {
   if (!/^628\d{7,12}$/.test(phone) || phone.length > 15) invalid('Periksa nomor WhatsApp kamu.');
   if (!AREAS.includes(body.area)) invalid('Pilih area yang tersedia.');
   if (body.consent !== true) invalid('Persetujuan penggunaan data diperlukan.');
-  const lead = { id: body.id, name, phone, area: body.area, consent: true, privacy_version: '2026-10-15', source_host: new URL(origin).host, environment: PRODUCTION_ORIGINS.includes(origin) ? 'production' : 'preview' };
+  const lead = { id: body.id, name, phone, contact: phone, channel: 'whatsapp', source_form: 'campaign', consultation_consent: true, marketing_consent: false, area: body.area, consent: true, privacy_version: '2026-10-15', source_host: new URL(origin).host, environment: PRODUCTION_ORIGINS.includes(origin) ? 'production' : 'preview' };
   for (const key of UTM_KEYS) lead[key] = field(body.utm?.[key], 256);
   let page;
   try { page = new URL(body.page_url || origin); } catch { invalid('Alamat halaman tidak valid.'); }
@@ -90,12 +91,15 @@ export function parseFilters(params) {
   const after = from ? day(from) : null, before = to ? day(to) + 86400000 : null;
   if (after !== null && before !== null && after >= before) invalid('Tanggal awal harus sebelum tanggal akhir.');
   const area = params.get('area') || null;
-  if (area && !AREAS.includes(area)) invalid('Filter area tidak valid.');
+  if (area && (area.length > 256 || /[\u0000-\u001f]/.test(area))) invalid('Filter area tidak valid.');
+  const form = params.get('form') || null, consultation = params.get('consultation') || null;
+  if (form && !Object.hasOwn(FORM_LABELS, form)) invalid('Filter form tidak valid.');
+  if (consultation && !['yes', 'no', 'unknown'].includes(consultation)) invalid('Filter persetujuan tidak valid.');
   const page = Number(params.get('page') || 1), limit = Number(params.get('limit') || 25);
   if (!Number.isInteger(page) || page < 1 || page > 100000 || ![25, 50, 100].includes(limit)) invalid('Halaman tidak valid.');
   const environment = params.get('environment') || 'production';
   if (!['production', 'preview'].includes(environment)) invalid('Filter data tidak valid.');
-  return { after: after === null ? null : new Date(after).toISOString(), before: before === null ? null : new Date(before).toISOString(), area, source: field(params.get('source'), 256), campaign: field(params.get('campaign'), 256), q: (field(params.get('q'), 120) || '').replace(/[^\p{L}\p{N}+\s-]/gu, ''), environment, order: params.get('order') === 'oldest' ? 'asc' : 'desc', offset: (page - 1) * limit, limit, page };
+  return { after: after === null ? null : new Date(after).toISOString(), before: before === null ? null : new Date(before).toISOString(), area, form, consultation, source: field(params.get('source'), 256), campaign: field(params.get('campaign'), 256), q: (field(params.get('q'), 120) || '').replace(/[^\p{L}\p{N}@.+\s-]/gu, ''), environment, order: params.get('order') === 'oldest' ? 'asc' : 'desc', offset: (page - 1) * limit, limit, page };
 }
 export const SECURITY_HEADERS = {
   'Cache-Control': 'private, no-store, max-age=0', 'Vercel-CDN-Cache-Control': 'no-store', 'Netlify-CDN-Cache-Control': 'no-store',
@@ -105,19 +109,28 @@ export const SECURITY_HEADERS = {
 const headers = SECURITY_HEADERS;
 const json = (data, status = 200, extra = {}) => new Response(JSON.stringify(data), { status, headers: { ...headers, 'Content-Type': 'application/json; charset=utf-8', ...extra } });
 const html = content => new Response(content, { headers: { ...headers, 'Content-Type': 'text/html; charset=utf-8' } });
-async function readJson(request) {
+async function readJson(request, max = 12288) {
   if (!(request.headers.get('content-type') || '').startsWith('application/json')) throw new HttpError(415, 'Format permintaan tidak didukung.');
   const text = await request.text();
-  if (encoder.encode(text).length > 12288) throw new HttpError(413, 'Permintaan terlalu besar.');
+  if (encoder.encode(text).length > max) throw new HttpError(413, 'Permintaan terlalu besar.');
   try { return JSON.parse(text); } catch { invalid('Format permintaan tidak valid.'); }
 }
 export function createHandler({ store, now = Date.now, crypto = globalThis.crypto, allowLocal = false, requireProxy = true }) {
   return async request => {
-    const url = new URL(request.url), route = (request.headers.get('x-campaign-route') || url.pathname).replace(/\/$/, '');
+    const url = new URL(request.url), route = (url.pathname.endsWith('/akasia-campaign/lead-magnet') ? '/integrations/lead-magnet' : request.headers.get('x-campaign-route') || url.pathname).replace(/\/$/, '');
     try {
-      if (!['/api/leads', '/result', '/api/results/login', '/api/results/logout', '/api/results/data', '/api/results/facets'].includes(route)) throw new HttpError(404, 'Halaman tidak ditemukan.');
+      if (!['/api/leads', '/result', '/api/results/login', '/api/results/logout', '/api/results/data', '/api/results/facets', '/integrations/lead-magnet'].includes(route)) throw new HttpError(404, 'Halaman tidak ditemukan.');
       const config = await store.getConfig();
       if (!config?.password_hash || !config?.session_secret) throw new Error('Configuration unavailable');
+      if (route === '/integrations/lead-magnet') {
+        const key = request.headers.get('x-akasia-ingest-key');
+        if (!key || key.length > 256 || !config.lead_magnet_key_hash || !equal(encoder.encode(await hashProxyKey(key, crypto)), encoder.encode(config.lead_magnet_key_hash))) throw new HttpError(403, 'Permintaan tidak diizinkan.');
+        if (request.method !== 'POST') return json({ error: 'Metode tidak didukung.' }, 405, { Allow: 'POST' });
+        const body = await readJson(request, 24000), lead = normalizeLeadMagnet(body);
+        const bucket = b64(await sign('quiz:' + (body.sourceContext?.clientIp || 'unknown'), config.session_secret, crypto));
+        if (!await store.consumeLimit('quiz:' + bucket, 20, 600)) throw new HttpError(429, 'Terlalu banyak permintaan. Coba lagi nanti.');
+        await store.insertLead(lead); return json({ ok: true });
+      }
       if (requireProxy) {
         const key = request.headers.get('x-campaign-proxy-key');
         if (!key || key.length > 256 || !config.proxy_key_hash || !equal(encoder.encode(await hashProxyKey(key, crypto)), encoder.encode(config.proxy_key_hash))) throw new HttpError(403, 'Permintaan tidak diizinkan.');
@@ -153,6 +166,7 @@ export function createHandler({ store, now = Date.now, crypto = globalThis.crypt
       return json(route === '/api/results/facets' ? await store.getFacets(filters.environment) : await store.listLeads(filters));
     } catch (error) {
       if (error instanceof HttpError) return json({ error: error.message }, error.status);
+      if (error instanceof LeadValidationError) return json({ error: error.message }, 400);
       console.error('campaign_request_failed', { route, status: 503 });
       return json({ error: 'Layanan belum tersedia. Silakan coba lagi.' }, 503);
     }
