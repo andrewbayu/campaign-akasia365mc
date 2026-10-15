@@ -10,6 +10,10 @@ test('historical import matches reversed CRM rows by identity/time and preserves
   assert.equal(leads.length, 2); assert.equal(report.skipped.length, 1); assert.equal(report.errors.length, 0);
   assert.equal(leads[0].id, first); assert.equal(leads[0].created_at, '2026-08-05T07:55:01.000Z'); assert.equal(leads[0].details.legacyCrm['FU Status'], 'Sudah di-FU');
   assert.equal(leads[0].utm_source, null); assert.equal(leads[0].page_url, null); assert.equal(leads[1].phone, null); assert.equal(leads[1].contact, 'unknown'); assert.deepEqual(report.invalidContacts, [3]);
+  assert.equal(leads[0].details.legacyCrm['WhatsApp No.'], '+6281200000000');
+  snapshot.admin.values[2][3] = 'corrected@example.com'; snapshot.admin.values[2][4] = 'Jakarta';
+  const updated = mapSheetSnapshot(snapshot).leads[0];
+  assert.equal(updated.details.legacyCrm.Email, 'corrected@example.com'); assert.equal(updated.details.legacyCrm.City, 'Jakarta');
 });
 test('ambiguous CRM matches preserve all candidates without assigning one to a submission', () => {
   const snapshot = { spreadsheetId: 'test', raw: { values: [headers,row(first,'QA','081200000000','2026-08-05T07:55:01Z')] }, admin: { values: [['Date Created','Nama','WhatsApp No.'],['2026-08-05 14:55','QA','+6281200000000'],['2026-08-05 14:55','QA','+6281200000000']] } };

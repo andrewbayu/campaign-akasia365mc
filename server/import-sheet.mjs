@@ -16,7 +16,7 @@ export function mapSheetSnapshot(snapshot) {
   const adminIndex = new Map();
   for (const [index, row] of adminValues.entries()) {
     const key = identity(row[1], row[2]) + '|' + minute(row[0], true);
-    const record = { row: index + 2, fields: Object.fromEntries(adminHeaders.map((key, i) => [key, row[i] ?? null]).filter(([key, value]) => !['Nama', 'WhatsApp No.', 'Email', 'City'].includes(key) && value !== null && value !== '')) };
+    const record = { row: index + 2, fields: Object.fromEntries(adminHeaders.map((key, i) => [key, row[i] ?? null]).filter(([, value]) => value !== null && value !== '')) };
     if (!adminIndex.has(key)) adminIndex.set(key, []); adminIndex.get(key).push(record);
   }
   const leads = [], report = { sourceRows: values.length, imported: 0, skipped: [], ambiguousCrm: [], invalidContacts: [], errors: [] };
