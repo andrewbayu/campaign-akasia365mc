@@ -13,6 +13,14 @@ const store = {
     const found = rows.filter(r => r.environment === f.environment && (!f.area || r.areas.includes(f.area)) && (!f.form || r.source_form === f.form) && (!f.consultation || (f.consultation === 'unknown' ? r.consultation_consent === null : r.consultation_consent === (f.consultation === 'yes'))) && (!f.source || r.utm_source === (f.source === '__none__' ? null : f.source)) && (!f.campaign || r.utm_campaign === (f.campaign === '__none__' ? null : f.campaign)) && (!f.after || r.created_at >= f.after) && (!f.before || r.created_at < f.before) && (!f.q || (r.name + r.phone + (r.email || '')).toLowerCase().includes(f.q.toLowerCase()))).sort((a, b) => a.created_at.localeCompare(b.created_at) * (f.order === 'asc' ? 1 : -1));
     return { rows: found.slice(f.offset, f.offset + f.limit), total: found.length, page: f.page, limit: f.limit };
   },
+  getAnalytics: async f => {
+    const found=(await store.listLeads({...f,offset:0,limit:100000})).rows;
+    const grouped=values=>[...values.reduce((map,key)=>map.set(key,(map.get(key)||0)+1),new Map())].map(([key,count])=>({key,count})).sort((a,b)=>b.count-a.count);
+    const dates=found.map(row=>new Date(Date.parse(row.created_at)+7*3600000).toISOString().slice(0,10));
+    const daily=new Map(dates.map(date=>[date,dates.filter(value=>value===date).length])); const trend=[];
+    if(dates.length) for(let day=Date.parse([...dates].sort()[0]),last=Date.parse([...dates].sort().at(-1));day<=last;day+=86400000) {const date=new Date(day).toISOString().slice(0,10);trend.push({date,count:daily.get(date)||0});}
+    return { total:found.length,followup:found.filter(r=>r.consultation_consent===true).length,with_utm:found.filter(r=>r.utm_source!=null).length,grain:'day',timezone:'Asia/Jakarta',trend,forms:grouped(found.map(r=>r.source_form)),sources:grouped(found.map(r=>r.utm_source)),areas:grouped(found.flatMap(r=>r.areas)) };
+  },
 };
 const handler = createHandler({ store, allowLocal: true, requireProxy: false });
 for (const row of rows) Object.assign(row, { source_form: 'campaign', consultation_consent: true, channel: 'whatsapp', contact: row.phone, areas: [row.area] });

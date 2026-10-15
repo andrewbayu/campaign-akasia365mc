@@ -4,7 +4,7 @@ export async function proxyRequest(request, { key, ip } = {}) {
   if (!key || !ip) return Response.json({ error: 'Layanan belum tersedia. Silakan coba lagi.' }, { status: 503, headers: SECURITY_HEADERS });
   const url = new URL(request.url);
   const route = url.searchParams.get('__route') || url.pathname;
-  if (!/^\/(result\/?|api\/leads|api\/results\/(login|logout|data|facets))$/.test(route)) return new Response('Not found', { status: 404 });
+  if (!/^\/(result\/?|api\/leads|api\/results\/(login|logout|data|facets|analytics))$/.test(route)) return new Response('Not found', { status: 404 });
   url.searchParams.delete('__route');
   const headers = new Headers();
   for (const name of ['cookie', 'origin', 'content-type']) if (request.headers.has(name)) headers.set(name, request.headers.get(name));

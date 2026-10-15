@@ -119,7 +119,7 @@ export function createHandler({ store, now = Date.now, crypto = globalThis.crypt
   return async request => {
     const url = new URL(request.url), route = (url.pathname.endsWith('/akasia-campaign/lead-magnet') ? '/integrations/lead-magnet' : request.headers.get('x-campaign-route') || url.pathname).replace(/\/$/, '');
     try {
-      if (!['/api/leads', '/result', '/api/results/login', '/api/results/logout', '/api/results/data', '/api/results/facets', '/integrations/lead-magnet'].includes(route)) throw new HttpError(404, 'Halaman tidak ditemukan.');
+      if (!['/api/leads', '/result', '/api/results/login', '/api/results/logout', '/api/results/data', '/api/results/facets', '/api/results/analytics', '/integrations/lead-magnet'].includes(route)) throw new HttpError(404, 'Halaman tidak ditemukan.');
       const config = await store.getConfig();
       if (!config?.password_hash || !config?.session_secret) throw new Error('Configuration unavailable');
       if (route === '/integrations/lead-magnet') {
@@ -163,6 +163,7 @@ export function createHandler({ store, now = Date.now, crypto = globalThis.crypt
       if (route === '/result') return html(authenticated ? resultsPage() : loginPage());
       if (!authenticated) throw new HttpError(401, 'Silakan masuk terlebih dahulu.');
       const filters = parseFilters(url.searchParams);
+      if (route === '/api/results/analytics') return json(await store.getAnalytics(filters));
       return json(route === '/api/results/facets' ? await store.getFacets(filters.environment) : await store.listLeads(filters));
     } catch (error) {
       if (error instanceof HttpError) return json({ error: error.message }, error.status);

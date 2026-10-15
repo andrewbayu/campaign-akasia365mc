@@ -1,6 +1,7 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
+  const { clearAnalytics = () => {}, renderAnalytics = () => {}, analyticsFailed = () => {} } = window.AkasiaCharts || {};
   const formLabels = { campaign: 'Promo LAMS', 'body-concern-check': 'Body Goal Check', 'body-journey-match': 'Body Journey Match', 'body-goal-navigator': 'Body Goal Navigator' };
   const questionLabels = { area: 'Area fokus', concern: 'Concern', effort: 'Yang sudah dicoba', importance: 'Seberapa berarti', timing: 'Kesiapan', goal: 'Tujuan', priority: 'Pertimbangan utama', pace: 'Langkah berikutnya' };
   const answerLabels = {
@@ -82,17 +83,24 @@
     $('data-status').textContent = 'Memuat data…'; $('results-error').textContent = '';
     $('previous').disabled = true; $('next').disabled = true; $('refresh').disabled = true;
     $('lead-rows').replaceChildren(); $('empty-state').hidden = true;
+    clearAnalytics(); $('filtered-count').textContent = '—'; $('total-count').textContent = '—';
     const query = parameters(), source = $('source').value || initial.get('source') || '', campaign = $('campaign').value || initial.get('campaign') || '', area = $('area').value || initial.get('area') || '';
     if (source) query.set('source', source); if (campaign) query.set('campaign', campaign); if (area) query.set('area', area);
     initial.delete('source'); initial.delete('campaign'); initial.delete('area');
     try {
-      const [data, facets] = await Promise.all([api('/api/results/data?' + query, { signal: controller.signal }), api('/api/results/facets?environment=' + encodeURIComponent($('environment').value), { signal: controller.signal })]);
+      const [data, facets, analytics] = await Promise.all([api('/api/results/data?' + query, { signal: controller.signal }), api('/api/results/facets?environment=' + encodeURIComponent($('environment').value), { signal: controller.signal }), api('/api/results/analytics?' + query, { signal: controller.signal }).then(value => ({value}), error => ({error}))]);
       if (serial !== current) return;
       if (page > 1 && !data.rows.length && data.total) { page = Math.ceil(data.total / limit); return load(); }
       options('source', facets.sources, 'Semua sumber', source); options('campaign', facets.campaigns, 'Semua campaign', campaign);
       options('area', facets.areas || [], 'Semua area', area);
       $('total-count').textContent = new Intl.NumberFormat('id-ID').format(facets.total);
       $('filtered-count').textContent = new Intl.NumberFormat('id-ID').format(data.total);
+      if (analytics.error) analyticsFailed();
+      else renderAnalytics(analytics.value, (key, value) => {
+        const field = filters.elements.namedItem(key);
+        if (![...field.options].some(option => option.value === value)) field.add(new Option(value === '__none__' ? 'Tanpa UTM' : value, value));
+        field.value = value; page = 1; load();
+      });
       const fragment = document.createDocumentFragment();
       for (const lead of data.rows) {
         const row = document.createElement('tr');
@@ -119,7 +127,7 @@
       // Search contains personal information; never persist it in the browser URL.
       const shareable = new URLSearchParams(query); shareable.delete('q'); history.replaceState(null, '', '/result' + (shareable.size ? '?' + shareable : ''));
     } catch (error) {
-      if (serial === current && error.name !== 'AbortError') { $('results-error').textContent = error.message || 'Data gagal dimuat.'; $('data-status').textContent = 'Gagal memuat data'; $('total-count').textContent = '—'; $('filtered-count').textContent = '—'; }
+      if (serial === current && error.name !== 'AbortError') { analyticsFailed(); $('results-error').textContent = error.message || 'Data gagal dimuat.'; $('data-status').textContent = 'Gagal memuat data'; $('total-count').textContent = '—'; $('filtered-count').textContent = '—'; }
     } finally { if (serial === current) $('refresh').disabled = false; }
   }
   filters.addEventListener('submit', event => { event.preventDefault(); page = 1; load(); });
