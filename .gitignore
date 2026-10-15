@@ -4,3 +4,12 @@ Thumbs.db
 
 # Local Netlify folder
 .netlify
+
+# Local access credentials, build output and provider caches
+.local/
+.env*
+!.env.example
+.vercel/
+dist/
+node_modules/
+.vercel

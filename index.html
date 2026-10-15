@@ -337,9 +337,15 @@
                 </div>
               </div>
 
+              <label class="flex items-start gap-2.5 text-[11px] leading-relaxed text-stone-500">
+                <input id="lead-consent" type="checkbox" required class="mt-0.5 h-4 w-4 shrink-0 accent-orange-600">
+                <span>Saya setuju data saya digunakan untuk tindak lanjut konsultasi dan promo ini melalui WhatsApp. <a href="/privacy.html" target="_blank" rel="noopener" class="underline underline-offset-2">Penggunaan data</a>.</span>
+              </label>
+              <div aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden"><label for="lead-website">Website</label><input id="lead-website" type="text" tabindex="-1" autocomplete="off"></div>
+              <p id="lead-feedback" role="status" aria-live="polite" class="text-xs text-stone-600 leading-relaxed"></p>
               <!-- Luxury Button-in-Button CTA -->
               <div class="pt-2">
-                <button type="submit" class="group relative w-full p-2 sm:p-2.5 rounded-2xl bg-gradient-to-r from-akasia-500 via-akasia-500 to-amber-500 hover:from-akasia-600 hover:to-amber-600 text-white font-heading font-black text-sm sm:text-base tracking-wide shadow-[0_12px_30px_-8px_rgba(240,78,35,0.45)] hover:shadow-[0_16px_36px_-6px_rgba(240,78,35,0.55)] transition-all duration-300 flex items-center justify-between cursor-pointer">
+                <button id="lead-submit" type="submit" class="group relative w-full p-2 sm:p-2.5 rounded-2xl bg-gradient-to-r from-akasia-500 via-akasia-500 to-amber-500 hover:from-akasia-600 hover:to-amber-600 text-white font-heading font-black text-sm sm:text-base tracking-wide shadow-[0_12px_30px_-8px_rgba(240,78,35,0.45)] hover:shadow-[0_16px_36px_-6px_rgba(240,78,35,0.55)] transition-all duration-300 flex items-center justify-between cursor-pointer">
                   <span class="pl-4 sm:pl-5 text-left font-black tracking-wide text-xs sm:text-sm md:text-base">KLAIM PROMO &amp; KONSULTASI</span>
                   <span class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center group-hover:translate-x-1 group-hover:bg-white/30 transition-all duration-200 flex-shrink-0 shadow-2xs">
                     <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -2394,8 +2400,10 @@
     </a>
   </div>
 
+  <script src="/assets/lead-capture.js"></script>
   <script>
     let hasTrackedLead = false;
+    let isSubmittingLead = false;
 
     function setArea(name, btn) {
       document.getElementById('form-area').value = name;
@@ -2415,17 +2423,33 @@
       }
     }
 
-    function handleLeadSubmit(e) {
+    async function handleLeadSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('lead-name').value.trim();
       const phone = document.getElementById('lead-phone').value.trim();
 
-      if (!name || !phone) return;
+      if (!name || !phone || !document.getElementById('lead-consent').checked || isSubmittingLead) return;
+      const feedback = document.getElementById('lead-feedback');
+      if (!/^(?:\+?62|0)?8\d{7,12}$/.test(phone.replace(/[\s().-]/g, ''))) {
+        feedback.textContent = 'Periksa kembali nomor WhatsApp kamu.';
+        return;
+      }
+      isSubmittingLead = true;
+      const button = document.getElementById('lead-submit');
+      button.disabled = true;
+      feedback.textContent = 'Menyimpan permintaan konsultasi…';
+      const popup = window.open('about:blank', '_blank');
+      if (popup) popup.opener = null;
+      try {
+        await window.akasiaLeadCapture.submit({ name, phone, area: document.getElementById('form-area').value, consent: true, website: document.getElementById('lead-website').value });
 
       const msg = 'Halo Akasia 365mc Indonesia [Ad], saya ingin klaim promo Diskon 15% + Extra 2 Sesi Orange Care dan meminta jadwal konsultasi awal LAMS bersama Beauty Consultant. Mohon konfirmasi ketersediaan slot dan ketentuan promonya.';
-      window.open(`https://wa.me/628566365365?text=${encodeURIComponent(msg)}`, '_blank');
+      const destination = `https://wa.me/628566365365?text=${encodeURIComponent(msg)}`;
+      if (popup && !popup.closed) popup.location.href = destination;
+      else window.location.assign(destination);
+      feedback.textContent = 'Permintaan tersimpan. Lanjutkan chat melalui WhatsApp untuk konfirmasi slot.';
 
-      // Count the valid form handoff once per page; tracking must not interrupt WhatsApp.
+      // Count only a saved submission; tracking must not interrupt WhatsApp.
       if (!hasTrackedLead && typeof window.fbq === 'function') {
         try {
           window.fbq('track', 'Lead');
@@ -2433,6 +2457,13 @@
         } catch {
           // WhatsApp remains available if the browser blocks the tracking call.
         }
+      }
+      } catch (error) {
+        if (popup && !popup.closed) popup.close();
+        feedback.textContent = error.name === 'TimeoutError' || error.name === 'TypeError' ? 'Koneksi terputus. Data belum terkonfirmasi tersimpan; silakan coba lagi.' : (error.message || 'Data belum tersimpan. Silakan coba lagi.');
+      } finally {
+        isSubmittingLead = false;
+        button.disabled = false;
       }
     }
 

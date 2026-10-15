@@ -1,0 +1,12 @@
+{
+  "name": "campaign-akasia365mc",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "pretest": "node scripts/build.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test",
+    "dev": "node scripts/dev.mjs"
+  }
+}

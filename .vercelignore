@@ -1,0 +1,13 @@
+.git
+.local
+.env*
+.netlify
+node_modules
+dist
+tests
+docs
+database
+backend
+scripts/dev.mjs
+scripts/create-access.mjs
+scripts/check-live.mjs
