@@ -292,7 +292,7 @@
             <p class="text-sm font-heading font-bold text-akasia-600 mb-1">Diskon 15% + Extra 2 Sesi Orange Care</p>
             <p class="text-xs text-stone-500 font-sans mb-4">Slot terbatas. Tim kami akan mengonfirmasi ketersediaan dan ketentuan promo.</p>
 
-            <form onsubmit="handleLeadSubmit(event)" class="space-y-4">
+            <form onfocusin="trackLeadMagnetStart()" onsubmit="handleLeadSubmit(event)" class="space-y-4">
               <!-- Tactile Area Selector -->
               <div>
                 <label class="block text-[11px] uppercase tracking-wider font-heading font-extrabold text-stone-500 mb-2">Pilih Area Fokus Tubuh:</label>
@@ -2403,7 +2403,18 @@
   <script src="/assets/lead-capture.js"></script>
   <script>
     let hasTrackedLead = false;
+    let hasTrackedLeadMagnetStart = false;
     let isSubmittingLead = false;
+
+    function trackLeadMagnetStart() {
+      if (hasTrackedLeadMagnetStart) return;
+      hasTrackedLeadMagnetStart = true;
+      try {
+        window.fbq?.('trackCustom', 'LeadMagnetStart');
+      } catch {
+        // Tracking must not interrupt the form.
+      }
+    }
 
     function setArea(name, btn) {
       document.getElementById('form-area').value = name;

@@ -47,6 +47,7 @@ Halaman ini bersifat *static single-page* dan dapat di-host langsung di GitHub P
 
 - Pixel ID: `1294224382246215`.
 - `PageView`: sekali saat halaman dimuat; fallback noscript disediakan.
+- `LeadMagnetStart`: custom event sekali saat pengunjung pertama kali berinteraksi dengan form, tanpa parameter data form.
 - `Lead`: setelah form valid disubmit untuk membuka WhatsApp, maksimal sekali per pemuatan halaman. Event ini menandai handoff, bukan konfirmasi pesan terkirim atau konsultasi terjadwal.
 - Automatic event detection dimatikan. Nama, nomor WhatsApp, dan area tubuh tidak disertakan sebagai parameter Pixel atau advanced matching.
 - Tracking gagal/diblokir tidak menghentikan handoff WhatsApp.

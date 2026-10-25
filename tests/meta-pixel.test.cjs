@@ -51,12 +51,21 @@ test('a page visit initializes the requested pixel and queues only PageView', ()
   assert.equal(inserted[0].async, true);
 });
 
+test('the first form interaction records one LeadMagnetStart without form data', () => {
+  const p = page('working');
+  assert.match(html, /<form onfocusin="trackLeadMagnetStart\(\)"/);
+  p.sandbox.trackLeadMagnetStart();
+  p.sandbox.trackLeadMagnetStart();
+  assert.deepEqual(p.events, [['trackCustom', 'LeadMagnetStart']]);
+});
+
 test('a saved submission records one Lead without form data and opens the intended WhatsApp handoff', async () => {
   const p = page('working');
+  p.sandbox.trackLeadMagnetStart();
   await p.submit();
   assert.equal(p.saved.length, 1);
   assert.equal(p.saved[0].utm.utm_campaign, 'promo15');
-  assert.deepEqual(p.events, [['track', 'Lead']]);
+  assert.deepEqual(p.events, [['trackCustom', 'LeadMagnetStart'], ['track', 'Lead']]);
   assert.equal(p.opened.length, 1);
   const url = new URL(p.opened[0].url);
   assert.equal(url.origin + url.pathname, 'https://wa.me/628566365365');
@@ -65,11 +74,12 @@ test('a saved submission records one Lead without form data and opens the intend
 
 test('repeated submissions reuse the ID and overlapping clicks cannot duplicate a save', async () => {
   const p = page('working');
+  p.sandbox.trackLeadMagnetStart();
   await Promise.all([p.submit(), p.submit()]);
   assert.equal(p.saved.length, 1);
   await p.submit();
   assert.equal(p.saved[0].id, p.saved[1].id);
-  assert.equal(p.events.length, 1);
+  assert.deepEqual(p.events, [['trackCustom', 'LeadMagnetStart'], ['track', 'Lead']]);
   assert.equal(p.opened.length, 2);
 });
 
@@ -85,13 +95,14 @@ test('blank required fields produce neither a conversion nor a WhatsApp handoff'
 for (const tracker of [undefined, 'throwing']) {
   test(`WhatsApp still opens when the pixel is ${tracker || 'unavailable'}`, async () => {
     const p = page(tracker);
+    p.sandbox.trackLeadMagnetStart();
     await assert.doesNotReject(p.submit);
     assert.equal(p.opened.length, 1);
   });
 }
 test('failed persistence closes the pending window without a conversion and preserves form values', async () => {
-  const p = page('working', true); await p.submit();
-  assert.equal(p.events.length, 0); assert.equal(p.opened[0].closed, true);
+  const p = page('working', true); p.sandbox.trackLeadMagnetStart(); await p.submit();
+  assert.deepEqual(p.events, [['trackCustom', 'LeadMagnetStart']]); assert.equal(p.opened[0].closed, true);
   assert.equal(p.opened[0].url, 'about:blank'); assert.equal(p.fields['lead-name'].value, 'QA Example');
   assert.match(p.fields['lead-feedback'].textContent, /Gagal menyimpan/);
   assert.equal(p.fields['lead-submit'].disabled, false);
