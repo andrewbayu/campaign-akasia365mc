@@ -13,8 +13,7 @@ function page(tracker, fails = false) {
   const fields = {
     'lead-name': { value: 'QA Example' },
     'lead-phone': { value: '081200000000' },
-    'form-area': { value: 'Lengan Atas' },
-    'lead-consent': { checked: true }, 'lead-feedback': { textContent: '' }, 'lead-submit': {}, 'lead-website': { value: '' },
+    'lead-feedback': { textContent: '' }, 'lead-submit': {}, 'lead-website': { value: '' },
   };
   const sandbox = {
     document: {
@@ -64,6 +63,8 @@ test('a saved submission records one Lead without form data and opens the intend
   p.sandbox.trackLeadMagnetStart();
   await p.submit();
   assert.equal(p.saved.length, 1);
+  assert.equal(p.saved[0].area, undefined);
+  assert.equal(p.saved[0].consent, true);
   assert.equal(p.saved[0].utm.utm_campaign, 'promo15');
   assert.deepEqual(p.events, [['trackCustom', 'LeadMagnetStart'], ['track', 'Lead']]);
   assert.equal(p.opened.length, 1);
@@ -107,8 +108,8 @@ test('failed persistence closes the pending window without a conversion and pres
   assert.match(p.fields['lead-feedback'].textContent, /Gagal menyimpan/);
   assert.equal(p.fields['lead-submit'].disabled, false);
 });
-test('missing consent and invalid phone do not save or emit conversions', async () => {
-  for (const change of [p => p.fields['lead-consent'].checked = false, p => p.fields['lead-phone'].value = 'abc']) {
+test('invalid phone does not save or emit conversions', async () => {
+  for (const change of [p => p.fields['lead-phone'].value = 'abc']) {
     const p = page('working'); change(p); await p.submit();
     assert.equal(p.saved.length, 0); assert.equal(p.events.length, 0); assert.equal(p.opened.length, 0);
   }

@@ -66,9 +66,9 @@ export function normalizeLead(body, origin) {
   if (phone.startsWith('0')) phone = '62' + phone.slice(1);
   else if (phone.startsWith('8')) phone = '62' + phone;
   if (!/^628\d{7,12}$/.test(phone) || phone.length > 15) invalid('Periksa nomor WhatsApp kamu.');
-  if (!AREAS.includes(body.area)) invalid('Pilih area yang tersedia.');
+  if (body.area != null && !AREAS.includes(body.area)) invalid('Pilih area yang tersedia.');
   if (body.consent !== true) invalid('Persetujuan penggunaan data diperlukan.');
-  const lead = { id: body.id, name, phone, contact: phone, channel: 'whatsapp', source_form: 'campaign', consultation_consent: true, marketing_consent: false, area: body.area, consent: true, privacy_version: '2026-10-15', source_host: new URL(origin).host, environment: PRODUCTION_ORIGINS.includes(origin) ? 'production' : 'preview' };
+  const lead = { id: body.id, name, phone, contact: phone, channel: 'whatsapp', source_form: 'campaign', consultation_consent: true, marketing_consent: false, area: body.area ?? 'Tidak ditentukan', consent: true, privacy_version: body.area == null ? '2026-11-04-submit-consent' : '2026-10-15', source_host: new URL(origin).host, environment: PRODUCTION_ORIGINS.includes(origin) ? 'production' : 'preview' };
   for (const key of UTM_KEYS) lead[key] = field(body.utm?.[key], 256);
   let page;
   try { page = new URL(body.page_url || origin); } catch { invalid('Alamat halaman tidak valid.'); }

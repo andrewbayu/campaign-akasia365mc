@@ -293,32 +293,6 @@
             <p class="text-xs text-stone-500 font-sans mb-4">Slot terbatas. Tim kami akan mengonfirmasi ketersediaan dan ketentuan promo.</p>
 
             <form onfocusin="trackLeadMagnetStart()" onsubmit="handleLeadSubmit(event)" class="space-y-4">
-              <!-- Tactile Area Selector -->
-              <div>
-                <label class="block text-[11px] uppercase tracking-wider font-heading font-extrabold text-stone-500 mb-2">Pilih Area Fokus Tubuh:</label>
-                <div class="grid grid-cols-2 gap-2 text-xs font-heading" id="area-grid">
-                  <button type="button" onclick="setArea('Perut Bawah', this)" class="area-btn group flex items-center justify-between p-3 rounded-xl border-2 border-akasia-500 bg-gradient-to-r from-orange-50/80 to-amber-50/40 text-stone-900 font-heading font-bold text-xs sm:text-sm transition-all duration-200 shadow-2xs cursor-pointer">
-                    <span class="area-text">Perut Bawah</span>
-                    <span class="area-indicator w-5 h-5 rounded-full bg-akasia-500 text-white flex items-center justify-center transition-all shadow-2xs">
-                      <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                    </span>
-                  </button>
-                  <button type="button" onclick="setArea('Lengan Atas', this)" class="area-btn group flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50/60 hover:bg-stone-50 hover:border-stone-300 text-stone-600 font-heading font-semibold text-xs sm:text-sm transition-all duration-200 cursor-pointer">
-                    <span class="area-text">Lengan Atas</span>
-                    <span class="area-indicator w-5 h-5 rounded-full border border-stone-300 bg-white flex items-center justify-center transition-all"></span>
-                  </button>
-                  <button type="button" onclick="setArea('Paha (Dalam/Luar)', this)" class="area-btn group flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50/60 hover:bg-stone-50 hover:border-stone-300 text-stone-600 font-heading font-semibold text-xs sm:text-sm transition-all duration-200 cursor-pointer">
-                    <span class="area-text">Paha (Dalam/Luar)</span>
-                    <span class="area-indicator w-5 h-5 rounded-full border border-stone-300 bg-white flex items-center justify-center transition-all"></span>
-                  </button>
-                  <button type="button" onclick="setArea('Pinggang / Flank', this)" class="area-btn group flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50/60 hover:bg-stone-50 hover:border-stone-300 text-stone-600 font-heading font-semibold text-xs sm:text-sm transition-all duration-200 cursor-pointer">
-                    <span class="area-text">Pinggang (Flank)</span>
-                    <span class="area-indicator w-5 h-5 rounded-full border border-stone-300 bg-white flex items-center justify-center transition-all"></span>
-                  </button>
-                </div>
-                <input type="hidden" id="form-area" value="Perut Bawah">
-              </div>
-
               <!-- Input Fields with Micro-labels & Country Code Badge -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <div>
@@ -337,10 +311,6 @@
                 </div>
               </div>
 
-              <label class="flex items-start gap-2.5 text-[11px] leading-relaxed text-stone-500">
-                <input id="lead-consent" type="checkbox" required class="mt-0.5 h-4 w-4 shrink-0 accent-orange-600">
-                <span>Saya setuju data saya digunakan untuk tindak lanjut konsultasi dan promo ini melalui WhatsApp. <a href="/privacy.html" target="_blank" rel="noopener" class="underline underline-offset-2">Penggunaan data</a>.</span>
-              </label>
               <div aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden"><label for="lead-website">Website</label><input id="lead-website" type="text" tabindex="-1" autocomplete="off"></div>
               <p id="lead-feedback" role="status" aria-live="polite" class="text-xs text-stone-600 leading-relaxed"></p>
               <!-- Luxury Button-in-Button CTA -->
@@ -2416,30 +2386,12 @@
       }
     }
 
-    function setArea(name, btn) {
-      document.getElementById('form-area').value = name;
-      document.querySelectorAll('.area-btn').forEach(b => {
-        b.className = 'area-btn group flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50/60 hover:bg-stone-50 hover:border-stone-300 text-stone-600 font-heading font-semibold text-xs sm:text-sm transition-all duration-200 cursor-pointer';
-        const indicator = b.querySelector('.area-indicator');
-        if (indicator) {
-          indicator.className = 'area-indicator w-5 h-5 rounded-full border border-stone-300 bg-white flex items-center justify-center transition-all';
-          indicator.innerHTML = '';
-        }
-      });
-      btn.className = 'area-btn group flex items-center justify-between p-3 rounded-xl border-2 border-akasia-500 bg-gradient-to-r from-orange-50/80 to-amber-50/40 text-stone-900 font-heading font-bold text-xs sm:text-sm transition-all duration-200 shadow-2xs cursor-pointer';
-      const activeIndicator = btn.querySelector('.area-indicator');
-      if (activeIndicator) {
-        activeIndicator.className = 'area-indicator w-5 h-5 rounded-full bg-akasia-500 text-white flex items-center justify-center transition-all shadow-2xs';
-        activeIndicator.innerHTML = '<svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
-      }
-    }
-
     async function handleLeadSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('lead-name').value.trim();
       const phone = document.getElementById('lead-phone').value.trim();
 
-      if (!name || !phone || !document.getElementById('lead-consent').checked || isSubmittingLead) return;
+      if (!name || !phone || isSubmittingLead) return;
       const feedback = document.getElementById('lead-feedback');
       if (!/^(?:\+?62|0)?8\d{7,12}$/.test(phone.replace(/[\s().-]/g, ''))) {
         feedback.textContent = 'Periksa kembali nomor WhatsApp kamu.';
@@ -2452,7 +2404,7 @@
       const popup = window.open('about:blank', '_blank');
       if (popup) popup.opener = null;
       try {
-        await window.akasiaLeadCapture.submit({ name, phone, area: document.getElementById('form-area').value, consent: true, website: document.getElementById('lead-website').value });
+        await window.akasiaLeadCapture.submit({ name, phone, consent: true, website: document.getElementById('lead-website').value });
 
       const msg = 'Halo Akasia 365mc Indonesia [Ad], saya ingin klaim promo Diskon 15% + Extra 2 Sesi Orange Care dan meminta jadwal konsultasi awal LAMS bersama Beauty Consultant. Mohon konfirmasi ketersediaan slot dan ketentuan promonya.';
       const destination = `https://wa.me/628566365365?text=${encodeURIComponent(msg)}`;

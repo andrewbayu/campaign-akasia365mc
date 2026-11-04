@@ -30,6 +30,10 @@ test('lead validation normalizes Indonesian phone and whitelists attribution', (
   assert.equal(lead.environment, 'production');
   assert.equal(lead.email, undefined);
   assert.equal(lead.consent, true);
+  const noArea = normalizeLead({ ...validLead, area: undefined }, origin);
+  assert.equal(noArea.area, 'Tidak ditentukan');
+  assert.equal(noArea.consultation_consent, true);
+  assert.equal(noArea.privacy_version, '2026-11-04-submit-consent');
   const custom = normalizeLead({ ...validLead, page_url: 'https://campaign.365mcindonesia.com/' }, 'https://campaign.365mcindonesia.com');
   assert.equal(custom.environment, 'production'); assert.equal(custom.source_host, 'campaign.365mcindonesia.com');
   assert.throws(() => normalizeLead({ ...validLead, consent: false }, origin));
