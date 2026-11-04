@@ -292,7 +292,7 @@
             <p class="text-sm font-heading font-bold text-akasia-600 mb-1">Diskon 15% + Extra 2 Sesi Orange Care</p>
             <p class="text-xs text-stone-500 font-sans mb-4">Slot terbatas. Tim kami akan mengonfirmasi ketersediaan dan ketentuan promo.</p>
 
-            <form onfocusin="trackLeadMagnetStart()" onsubmit="handleLeadSubmit(event)" class="space-y-4">
+            <form onsubmit="handleLeadSubmit(event)" class="space-y-4">
               <!-- Input Fields with Micro-labels & Country Code Badge -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <div>
@@ -315,7 +315,7 @@
               <p id="lead-feedback" role="status" aria-live="polite" class="text-xs text-stone-600 leading-relaxed"></p>
               <!-- Luxury Button-in-Button CTA -->
               <div class="pt-2">
-                <button id="lead-submit" type="submit" class="group relative w-full p-2 sm:p-2.5 rounded-2xl bg-gradient-to-r from-akasia-500 via-akasia-500 to-amber-500 hover:from-akasia-600 hover:to-amber-600 text-white font-heading font-black text-sm sm:text-base tracking-wide shadow-[0_12px_30px_-8px_rgba(240,78,35,0.45)] hover:shadow-[0_16px_36px_-6px_rgba(240,78,35,0.55)] transition-all duration-300 flex items-center justify-between cursor-pointer">
+                <button id="lead-submit" onclick="trackLeadMagnetStart()" type="submit" class="group relative w-full p-2 sm:p-2.5 rounded-2xl bg-gradient-to-r from-akasia-500 via-akasia-500 to-amber-500 hover:from-akasia-600 hover:to-amber-600 text-white font-heading font-black text-sm sm:text-base tracking-wide shadow-[0_12px_30px_-8px_rgba(240,78,35,0.45)] hover:shadow-[0_16px_36px_-6px_rgba(240,78,35,0.55)] transition-all duration-300 flex items-center justify-between cursor-pointer">
                   <span class="pl-4 sm:pl-5 text-left font-black tracking-wide text-xs sm:text-sm md:text-base">KLAIM PROMO &amp; KONSULTASI</span>
                   <span class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center group-hover:translate-x-1 group-hover:bg-white/30 transition-all duration-200 flex-shrink-0 shadow-2xs">
                     <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>

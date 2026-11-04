@@ -50,9 +50,10 @@ test('a page visit initializes the requested pixel and queues only PageView', ()
   assert.equal(inserted[0].async, true);
 });
 
-test('the first form interaction records one LeadMagnetStart without form data', () => {
+test('the claim button click records one LeadMagnetStart without form data', () => {
   const p = page('working');
-  assert.match(html, /<form onfocusin="trackLeadMagnetStart\(\)"/);
+  assert.doesNotMatch(html, /<form[^>]*onfocusin=/);
+  assert.match(html, /<button id="lead-submit"[^>]*onclick="trackLeadMagnetStart\(\)"/);
   p.sandbox.trackLeadMagnetStart();
   p.sandbox.trackLeadMagnetStart();
   assert.deepEqual(p.events, [['trackCustom', 'LeadMagnetStart']]);
